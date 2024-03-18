@@ -1,0 +1,4 @@
+name: BJSG
+version: '${project.version}'
+main: net.berryjar.bjsg.BJSG
+api-version: '1.20'
