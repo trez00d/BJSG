@@ -39,6 +39,9 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+            <outputFile>/home/z00d/Desktop/MavenPlugins/BJSG.jar</outputFile>
+        </configuration>
       </plugin>
     </plugins>
     <resources>
