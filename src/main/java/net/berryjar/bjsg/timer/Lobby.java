@@ -4,8 +4,13 @@ import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.arena.GameState;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.UUID;
 
 public class Lobby extends BukkitRunnable{
 
@@ -24,6 +29,7 @@ public class Lobby extends BukkitRunnable{
         arena.setState(GameState.LOBBY);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
+
     }
 
     @Override

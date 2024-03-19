@@ -4,6 +4,7 @@ import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chat.ChatHandler;
+import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -36,9 +37,9 @@ public class PreDeathmatch extends BukkitRunnable {
         if (time == 0 && arena.getPlayers().size() > 1) {
             cancel();
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
-            for (UUID u : arena.getPlayers()) {
+            for (SGPlayer player : arena.getPlayers()) {
                 System.out.println("18");
-                arena.removePlayer(u);
+                arena.removePlayer(player);
                 System.out.println("19");
             }
             if (!arena.getPostGame().isRunning()) {
@@ -53,9 +54,10 @@ public class PreDeathmatch extends BukkitRunnable {
 
         System.out.println("predm players size == 1");
         if (arena.getPlayers().size() == 1) {
-            Player winner = Bukkit.getPlayer(arena.players.get(0));
+            SGPlayer sgWinner = (arena.players.get(0));
+            Player winner = sgWinner.getPlayer();
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
-            arena.removePlayer(winner.getUniqueId());
+            arena.removePlayer(sgWinner);
             cancel();
             if (!arena.getPostGame().isRunning()) {
                 arena.getPostGame().startPostGame(15);

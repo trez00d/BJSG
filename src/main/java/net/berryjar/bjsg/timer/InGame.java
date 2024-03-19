@@ -4,6 +4,7 @@ import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chat.ChatHandler;
+import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -44,8 +45,8 @@ public class InGame extends BukkitRunnable {
 
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
             arena.getPostGame().startPostGame(15);
-            for (UUID u : arena.getPlayers()) {
-                arena.removePlayer(u);
+            for (SGPlayer player : arena.getPlayers()) {
+                arena.removePlayer(player);
             }
             return; // Get out of the run method.
 
@@ -58,9 +59,10 @@ public class InGame extends BukkitRunnable {
                 return;
             }
 
-            Player winner = Bukkit.getPlayer(arena.players.get(0));
+            SGPlayer sgWinner = arena.players.get(0);
+            Player winner = sgWinner.getPlayer();
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
-            arena.removePlayer(winner.getUniqueId());
+            arena.removePlayer(sgWinner);
             return;
         }
         System.out.println("ingame time == 0 OR players size < 5");

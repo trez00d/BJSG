@@ -4,8 +4,15 @@ import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chat.ChatHandler;
+import net.berryjar.bjsg.player.SGPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Random;
+import java.util.UUID;
 
 public class PreGame extends BukkitRunnable {
 
@@ -24,6 +31,30 @@ public class PreGame extends BukkitRunnable {
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
         arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "Lobby time has ended. The game will start soon.");
+        for (SGPlayer player : arena.getPlayers()) {
+            for (int i = 0; i < arena.getSpawns().size(); i++) {
+                Location loc  = arena.getSpawns(i);
+                Player p = player.getPlayer();
+                p.teleport(loc);
+            }
+//            int numSpawns = arena.getSpawns();
+//            int randomIndex = new Random().nextInt(numSpawns);
+//            if (randomIndex < 0 || randomIndex >= 2) {
+//                Location loc = arena.getSpawns().get(randomIndex);
+//                p.teleport(loc);
+//            } else {
+//                continue;
+//            }
+
+//            for (int i = 0; i < arena.getSpawns().keySet().size(); i++) {
+//                Location loc = arena.getSpawns().get(i);
+//                player.teleport(loc);
+//            }
+//            for (int i : arena.getSpawns().keySet()) {
+//                Location loc = arena.getSpawns().get(i);
+//                player.teleport(loc);
+//            }
+        }
     }
     @Override
     public void run() {
@@ -62,4 +93,5 @@ public class PreGame extends BukkitRunnable {
     public boolean isRunning() {
         return arena.getState() == GameState.PREGAME;
     }
+
 }

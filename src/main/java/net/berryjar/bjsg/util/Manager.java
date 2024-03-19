@@ -3,6 +3,7 @@ package net.berryjar.bjsg.util;
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.config.ConfigManager;
+import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -78,11 +79,11 @@ public class Manager {
         return getArena(id) != null;
     }
 
-    public Arena getArena(UUID uuid) {
+    public Arena getArena(SGPlayer sgPlayer) {
         for (int i = 0; i < plugin.activeArenas.size(); i++) {
             final Arena arena = plugin.activeArenas.get(i);
 
-            if (arena.contains(uuid)) {
+            if (arena.contains(sgPlayer)) {
                 return arena;
             }
         }

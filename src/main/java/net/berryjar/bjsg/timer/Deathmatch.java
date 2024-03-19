@@ -4,6 +4,7 @@ import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chat.ChatHandler;
+import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -44,9 +45,9 @@ public class Deathmatch extends BukkitRunnable {
             System.out.println("32");
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
             System.out.println("33");
-            for (UUID u : arena.getPlayers()) {
+            for (SGPlayer player : arena.getPlayers()) {
                 System.out.println("34");
-                arena.removePlayer(u);
+                arena.removePlayer(player);
                 System.out.println("35");
 
             }

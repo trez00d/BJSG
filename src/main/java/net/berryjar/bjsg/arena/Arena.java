@@ -3,15 +3,14 @@ package net.berryjar.bjsg.arena;
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.cuboid.Cuboid;
+import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.timer.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 public class Arena {
 
@@ -24,15 +23,19 @@ public class Arena {
     private Deathmatch deathmatch;
     private PostGame postGame;
     private GameState state;
-    public ArrayList<UUID> players;
-    private ArrayList<Location> spawns;
+    public ArrayList<SGPlayer> players;
+//    public HashMap<Integer, UUID> playersLinkedID;
+    private LinkedHashMap<Integer, Location> spawns;
+    private int lastSpawn;
     private final String arenaID;
     private final int requiredPlayers;
+    private int playerID;
 
     public Arena(final BJSG plugin, Cuboid arenaRegion, String arenaID) {
+        this.playerID = 0;
         this.plugin = plugin;
         this.arenaRegion = arenaRegion;
-        this.players = new ArrayList<UUID>();
+//        this.playersLinkedID = new HashMap<Integer, UUID>();
         this.arenaID = arenaID;
         this.requiredPlayers = 2;
         this.lobby = new Lobby(plugin, this);
@@ -41,7 +44,15 @@ public class Arena {
         this.preDeathmatch = new PreDeathmatch(plugin, this);
         this.deathmatch = new Deathmatch(plugin, this);
         this.postGame = new PostGame(plugin, this);
-        this.spawns = new ArrayList<Location>();
+        if (plugin.getArenaSpawnsMap(arenaID) == null) {
+            this.spawns = new LinkedHashMap<Integer, Location>();
+        } else {
+            this.spawns = plugin.getArenaSpawnsMap(arenaID);
+        }
+        if (this.getPlayers() == null) {
+            this.players = new ArrayList<SGPlayer>();
+        }
+
 
 
     }
@@ -73,24 +84,24 @@ public class Arena {
     public void setState(GameState state) {
         this.state = state;
     }
-    public boolean contains(UUID uuid) {
-        return players.contains(uuid);
+    public boolean contains(SGPlayer player) {
+        return players.contains(player);
     }
     public String getId() {
         return arenaID;
     }
     public void broadcast(String message) {
 
-        for (UUID u : players) {
-            Player player = Bukkit.getPlayer(u);
-            player.sendMessage(message);
+        for (SGPlayer player : players) {
+            Player p = player.getPlayer();
+            p.sendMessage(message);
         }
 //        for (int i = 0; i < players.size(); i++) {
 //
 //            Bukkit.getPlayer(players.get(i)).sendMessage(message);
 //        }
     }
-    public ArrayList<UUID> getPlayers() {
+    public ArrayList<SGPlayer> getPlayers() {
         return players;
     }
 
@@ -108,17 +119,17 @@ public class Arena {
     }
 
     public void addPlayer(UUID uuid) {
-        players.add(uuid);
-
+        int i = playerID++;
+        SGPlayer player = new SGPlayer(plugin, this.arenaID,uuid, i);
+        players.add(player);
         // Check whether to start the countdown. Make sure that the countdown
         // isn't already running.
         if (!lobby.isRunning() && players.size() >= requiredPlayers) {
             lobby.startLobby(30);
         }
     }
-    public void removePlayer(UUID uuid) {
-        players.remove(uuid);
-
+    public void removePlayer(SGPlayer player) {
+        players.remove(player);
         // Remove the kit data for the UUID from the arena.
 
 
@@ -129,16 +140,36 @@ public class Arena {
             inGame.cancel();
 
             // Get the last player.
-            Player winner = Bukkit.getPlayer(players.get(0));
+            Player winner = Bukkit.getPlayer(players.get(0).getPlayerUUID());
             broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
 //            Bukkit.broadcastMessage(
 //                    ChatColor.GREEN + "" + ChatColor.BOLD + winner.getName() + " won arena " + arenaID + "!");
 
-            removePlayer(winner.getUniqueId());
+            removePlayer(players.get(0));
 
             // Reset the arena.
             reset();
         }
+    }
+
+    public LinkedHashMap<Integer, Location> getSpawns() {
+        return spawns;
+    }
+    public Location getSpawns(int input) {
+        for (int i : spawns.keySet()) {
+            if (i == input) {
+                return spawns.get(i);
+            }
+        }
+        return null;
+    }
+    public void addSpawn(int i, Location loc) {
+        spawns.put(i, loc);
+        this.lastSpawn = i;
+    }
+    public void removeSpawn() {
+        int spawn = lastSpawn;
+        spawns.remove(lastSpawn);
     }
 
     public void setLobbyNull() {
@@ -146,6 +177,9 @@ public class Arena {
     }
     public void setLobbyRunnable() {
         this.lobby = new Lobby(plugin, this);
+    }
+    public int getLastSpawn() {
+        return lastSpawn;
     }
 
 

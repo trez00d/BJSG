@@ -2,6 +2,8 @@ package net.berryjar.bjsg.command.subcommand;
 
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
+import net.berryjar.bjsg.arena.ArenaManager;
+import net.berryjar.bjsg.arena.SpawnCreator;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.command.SubCommand;
 import net.berryjar.bjsg.config.ConfigManager;
@@ -9,12 +11,19 @@ import net.berryjar.bjsg.cuboid.CuboidManager;
 import net.berryjar.bjsg.magicwand.MagicWand;
 import net.berryjar.bjsg.magicwand.WandManager;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class EditCommand extends SubCommand {
 
     private final BJSG plugin;
+
+    private int spawnInc = 0;
 
     public EditCommand(final BJSG plugin) {
         this.plugin = plugin;
@@ -56,6 +65,9 @@ public class EditCommand extends SubCommand {
 
         }
         if (args.length == 2) {
+            if (args[1].equalsIgnoreCase("addspawn")) {
+                player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
+            }
             if (args[1].equalsIgnoreCase("exit")) {
                 player.sendMessage("1");
                 if (!(player.hasPermission("bjsg.edit"))) {
@@ -117,6 +129,46 @@ public class EditCommand extends SubCommand {
                 }
 
             }
+            if (args[0].equalsIgnoreCase("edit")) {
+                if (args[1].equalsIgnoreCase("addspawn")) {
+                    spawnInc++;
+                    SpawnCreator spawnCreator = new SpawnCreator(plugin);
+
+                    String arenaID = args[2];
+                    Location spawnLoc = player.getLocation();
+                    spawnCreator.createSpawn(spawnLoc, arenaID);
+                    for (Arena a : plugin.activeArenas) {
+                        if (a.getId().equalsIgnoreCase(arenaID)) {
+                            a.addSpawn(spawnInc, spawnLoc);
+                            Location loc = a.getSpawns().get(spawnInc);
+                            LinkedHashMap<Integer, Location> arenaSpawn = a.getSpawns();
+                            plugin.arenaSpawns.put(arenaID, arenaSpawn);
+                            player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "Spawn point set: " + arenaID + ", " + spawnInc + ", " + loc);
+                        }
+                    }
+
+
+                }
+                if (args[1].equalsIgnoreCase("delspawn")) {
+                    String arenaID = args[2];
+                    Location spawnLoc = player.getLocation();
+                    spawnInc--;
+                    for (Arena a : plugin.activeArenas) {
+                        if (a.getId().equalsIgnoreCase(arenaID)) {
+                            a.removeSpawn();
+                        }
+                    }
+                }
+                if (args[1].equalsIgnoreCase("listspawns")) {
+                    String arenaID = args[2];
+                    for (Arena a : plugin.activeArenas) {
+                        if (a.getId().equals(arenaID)) {
+                            player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + a.getSpawns().toString());
+                        }
+                    }
+                }
+            }
+
         }
 
     }

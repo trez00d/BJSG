@@ -4,6 +4,7 @@ import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chat.ChatHandler;
+import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.units.qual.A;
@@ -35,8 +36,8 @@ public class PostGame extends BukkitRunnable {
         System.out.println("postgame time == 0");
         if (time == 0) {
             cancel();
-            for (UUID u : arena.getPlayers()) {
-                arena.removePlayer(u);
+            for (SGPlayer player : arena.getPlayers()) {
+                arena.removePlayer(player);
             }
             Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
             arenaNew.getLobby().startLobby(15);

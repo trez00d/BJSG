@@ -7,15 +7,14 @@ import net.berryjar.bjsg.cuboid.CuboidManager;
 import net.berryjar.bjsg.listener.*;
 import net.berryjar.bjsg.magicwand.Tuple;
 import net.berryjar.bjsg.magicwand.WandManager;
+import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.util.Manager;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public final class BJSG extends JavaPlugin {
@@ -30,6 +29,19 @@ public final class BJSG extends JavaPlugin {
     public HashSet<Cuboid> activeRegions = new HashSet<Cuboid>();
     public HashSet<UUID> wandPrime = new HashSet<UUID>();
     public Tuple<Location, Location> clipboardMap = new Tuple<Location, Location>(null, null);
+    public HashMap<String, LinkedHashMap<Integer, Location>> arenaSpawns = new HashMap<String, LinkedHashMap<Integer, Location>>();
+    public HashSet<SGPlayer> sgPlayers = new HashSet<SGPlayer>();
+
+    public LinkedHashMap<Integer, Location> getArenaSpawnsMap(String arenaID) {
+        for (String ID : arenaSpawns.keySet()) {
+            if (ID.equalsIgnoreCase(arenaID)) {
+                return arenaSpawns.get(arenaID);
+            }
+
+        }
+        return null;
+    }
+
     @Override
     public void onEnable() {
 

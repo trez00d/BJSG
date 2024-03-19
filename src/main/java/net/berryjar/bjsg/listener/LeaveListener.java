@@ -3,6 +3,7 @@ package net.berryjar.bjsg.listener;
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.chat.ChatHandler;
+import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.util.Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class LeaveListener implements Listener {
     private final BJSG plugin;
+    private SGPlayer sgPlayer;
 
     public LeaveListener(final BJSG plugin) {
         this.plugin = plugin;
@@ -20,12 +22,12 @@ public class LeaveListener implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        sgPlayer = sgPlayer.getSGPlayer(player.getUniqueId());
         Manager manager = new Manager(plugin);
 
-
-        Arena arena = manager.getArena(player.getUniqueId());
+        Arena arena = manager.getArena(sgPlayer);
         if (arena != null) {
-            arena.removePlayer(player.getUniqueId());
+            arena.removePlayer(sgPlayer);
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.RED + player.getName() + " left the server, so has been removed from the arena.");
         }
     }

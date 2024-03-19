@@ -3,6 +3,7 @@ package net.berryjar.bjsg.listener;
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.chat.ChatHandler;
+import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.util.Helper;
 import net.berryjar.bjsg.util.Manager;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import org.bukkit.ChatColor;
 public class DeathListener implements Listener {
 
     private final BJSG plugin;
+    private SGPlayer sgPlayer;
 
     public DeathListener(final BJSG plugin) {
         this.plugin = plugin;
@@ -22,13 +24,14 @@ public class DeathListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
+        sgPlayer = sgPlayer.getSGPlayer(player.getUniqueId());
         event.setDeathMessage(null);
         Manager manager = new Manager(plugin);
 
-        Arena arena = manager.getArena(player.getUniqueId());
+        Arena arena = manager.getArena(sgPlayer);
         if (arena != null) {
             // Remove the player from the arena.
-            arena.removePlayer(player.getUniqueId());
+            arena.removePlayer(sgPlayer);
 
             if (player.getKiller() != null) {
                 Player killer = player.getKiller();
