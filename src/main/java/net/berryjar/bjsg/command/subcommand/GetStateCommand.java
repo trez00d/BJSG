@@ -55,7 +55,7 @@ public class GetStateCommand extends SubCommand {
                 player.sendMessage("1");
                 String arenaID = args[1];
                 player.sendMessage("2");
-                ArenaManager arenaManager = new ArenaManager();
+                ArenaManager arenaManager = new ArenaManager(plugin);
                 for (Arena a : plugin.activeArenas) {
                     if (arenaManager.getArenaID(a).equalsIgnoreCase(arenaID)) {
                         player.sendMessage("3");

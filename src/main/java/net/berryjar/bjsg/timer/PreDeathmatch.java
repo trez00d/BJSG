@@ -36,14 +36,14 @@ public class PreDeathmatch extends BukkitRunnable {
         System.out.println("predm time == 0 && players size greater than 1");
         if (time == 0 && arena.getPlayers().size() > 1) {
             cancel();
-            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
-            for (SGPlayer player : arena.getPlayers()) {
-                System.out.println("18");
-                arena.removePlayer(player);
-                System.out.println("19");
-            }
-            if (!arena.getPostGame().isRunning()) {
-                arena.getPostGame().startPostGame(15);
+
+//            for (SGPlayer player : arena.getPlayers()) {
+//                System.out.println("18");
+//                arena.removePlayer(player);
+//                System.out.println("19");
+//            }
+            if (!arena.getDeathmatch().isRunning()) {
+                arena.getDeathmatch().startDeathmatch(20);
                 return;
             }
 
@@ -69,7 +69,7 @@ public class PreDeathmatch extends BukkitRunnable {
         }
 
         System.out.println("predm time 0");
-        if (time == 0) {
+        if (this.time == 0) {
 
 
             cancel();
@@ -97,6 +97,7 @@ public class PreDeathmatch extends BukkitRunnable {
 //            return; // Get out of the run method.
 //        }
 
+        System.out.println(time);
         time--;
     }
 

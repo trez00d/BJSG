@@ -5,6 +5,7 @@ import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.cuboid.Cuboid;
 import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.timer.*;
+import net.berryjar.bjsg.util.Helper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -26,18 +27,19 @@ public class Arena {
     public ArrayList<SGPlayer> players;
 //    public HashMap<Integer, UUID> playersLinkedID;
     private LinkedHashMap<Integer, Location> spawns;
+    private ArrayList<Location> lobbyLocation;
     private int lastSpawn;
     private final String arenaID;
     private final int requiredPlayers;
     private int playerID;
 
     public Arena(final BJSG plugin, Cuboid arenaRegion, String arenaID) {
-        this.playerID = 0;
+        this.playerID = 1;
         this.plugin = plugin;
         this.arenaRegion = arenaRegion;
 //        this.playersLinkedID = new HashMap<Integer, UUID>();
         this.arenaID = arenaID;
-        this.requiredPlayers = 2;
+        this.requiredPlayers = 3;
         this.lobby = new Lobby(plugin, this);
         this.preGame = new PreGame(plugin, this);
         this.inGame = new InGame(plugin, this);
@@ -52,6 +54,7 @@ public class Arena {
         if (this.getPlayers() == null) {
             this.players = new ArrayList<SGPlayer>();
         }
+        this.lobbyLocation = new ArrayList<Location>();
 
 
 
@@ -62,6 +65,15 @@ public class Arena {
     }
     public Lobby getLobby() {
         return lobby;
+    }
+    public Location getLobbySpawn() {
+        return lobbyLocation.get(0);
+    }
+    public int getLobbySetSize() {
+        return lobbyLocation.size();
+    }
+    public void removeLobbySpawns() {
+        lobbyLocation.clear();
     }
 
     public InGame getInGame() {
@@ -120,13 +132,15 @@ public class Arena {
 
     public void addPlayer(UUID uuid) {
         int i = playerID++;
-        SGPlayer player = new SGPlayer(plugin, this.arenaID,uuid, i);
+        SGPlayer player = new SGPlayer(plugin, this.arenaID, uuid, i);
         players.add(player);
         // Check whether to start the countdown. Make sure that the countdown
         // isn't already running.
         if (!lobby.isRunning() && players.size() >= requiredPlayers) {
             lobby.startLobby(30);
         }
+        Helper.clearInventoryAndEffects(Bukkit.getPlayer(uuid));
+
     }
     public void removePlayer(SGPlayer player) {
         players.remove(player);
@@ -155,10 +169,18 @@ public class Arena {
     public LinkedHashMap<Integer, Location> getSpawns() {
         return spawns;
     }
-    public Location getSpawns(int input) {
+    public Location getSpawn(int input) {
+        System.out.println("gs1");
+        System.out.println(input);
         for (int i : spawns.keySet()) {
-            if (i == input) {
+            System.out.println("gs2");
+            System.out.println(i);
+            if (input == i) {
+                System.out.println("gs3");
+                System.out.println(spawns.get(i));
                 return spawns.get(i);
+
+
             }
         }
         return null;
@@ -170,6 +192,29 @@ public class Arena {
     public void removeSpawn() {
         int spawn = lastSpawn;
         spawns.remove(lastSpawn);
+    }
+    public void addLobby(Location loc) {
+        lobbyLocation.add(loc);
+    }
+    public void stopArena() {
+
+        for (SGPlayer player : getPlayers()) {
+            removePlayer(player);
+        }
+        if (getState() == GameState.LOBBY) {
+            getLobby().cancel();
+        } else if (getState() == GameState.PREGAME) {
+            getPreGame().cancel();
+        } else if (getState() == GameState.INGAME) {
+            getInGame().cancel();
+        } else if (getState() == GameState.PREDEATHMATCH) {
+            getPreDeathmatch().cancel();
+        } else if (getState() == GameState.DEATHMATCH) {
+            getDeathmatch().cancel();
+        } else if (getState() == GameState.POSTGAME) {
+            getPostGame().cancel();
+        }
+        setState(GameState.STOPPED);
     }
 
     public void setLobbyNull() {

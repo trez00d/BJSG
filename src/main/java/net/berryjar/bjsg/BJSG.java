@@ -1,6 +1,7 @@
 package net.berryjar.bjsg;
 
 import net.berryjar.bjsg.arena.Arena;
+import net.berryjar.bjsg.arena.ArenaManager;
 import net.berryjar.bjsg.command.CommandManager;
 import net.berryjar.bjsg.cuboid.Cuboid;
 import net.berryjar.bjsg.cuboid.CuboidManager;
@@ -19,6 +20,7 @@ import java.util.logging.Level;
 
 public final class BJSG extends JavaPlugin {
     public CommandManager commandManager;
+    public ArenaManager arenaManager;
     public Manager manager;
     public CuboidManager regionManager;
     public DeathListener deathListener;
@@ -53,10 +55,11 @@ public final class BJSG extends JavaPlugin {
         deathListener = new DeathListener(this);
         leaveListener = new LeaveListener(this);
         wandManager = new WandManager(this);
+        arenaManager = new ArenaManager(this);
         playerWandInteract = new PlayerWandInteract(this);
         getServer().getPluginManager().registerEvents(new DeathListener(this), this);
         getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
-        getServer().getPluginManager().registerEvents(new PreventionListener(), this);
+        getServer().getPluginManager().registerEvents(new PreventionListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerWandInteract(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
         File config = new File(this.getDataFolder(), "config.yml");
@@ -70,6 +73,8 @@ public final class BJSG extends JavaPlugin {
         }
 
         regionManager.loadRegions();
+        arenaManager.loadArenaSpawns();
+
     }
 
     @Override

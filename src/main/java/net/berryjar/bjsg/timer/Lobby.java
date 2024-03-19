@@ -4,6 +4,7 @@ import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.arena.GameState;
+import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,14 +29,15 @@ public class Lobby extends BukkitRunnable{
     public void startLobby(int time) {
         arena.setState(GameState.LOBBY);
         this.time = time;
-        this.runTaskTimer(plugin, 0L, 20L);
+        this.runTaskTimer(plugin, 0L, 200L);
+
 
     }
 
     @Override
     public void run() {
 
-        if (time == 0) {
+        if (this.time == 0) {
             cancel();
             if (!arena.getPreGame().isRunning()) {
                 arena.getPreGame().startPreGame(15);

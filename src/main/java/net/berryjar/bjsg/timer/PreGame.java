@@ -5,6 +5,7 @@ import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.player.SGPlayer;
+import net.berryjar.bjsg.util.Helper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -31,12 +32,43 @@ public class PreGame extends BukkitRunnable {
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
         arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "Lobby time has ended. The game will start soon.");
+
         for (SGPlayer player : arena.getPlayers()) {
-            for (int i = 0; i < arena.getSpawns().size(); i++) {
-                Location loc  = arena.getSpawns(i);
-                Player p = player.getPlayer();
-                p.teleport(loc);
-            }
+            int playerNum = player.getID();
+            System.out.println(arena.getSpawns());
+            System.out.println(player.getPlayer().getName() + " " + playerNum);
+            for (Arena a : plugin.activeArenas) {
+                if (a.getSpawns().containsKey(playerNum)) {
+                    Helper.clearInventoryAndEffects(player.getPlayer());
+                    Helper.clearPotionEffects(player.getPlayer());
+                    player.getPlayer().teleport(a.getSpawn(playerNum));
+                }
+//            for (int i = 0; i < arena.getSpawns().size(); i++) {
+//                Location loc = arena.getSpawn(i);
+//                System.out.println(loc);
+//            }
+//            for (int i = 0; i < arena.getSpawns().size(); i++) {
+//                Location loc = arena.getSpawn(i);
+//
+//                System.out.println(player.getPlayer().getName() + playerNum);
+//                System.out.println(loc + "loading from map");
+//                if (playerNum == i) {
+//                    Player p = player.getPlayer();
+//                    p.teleport(loc);
+//                }
+//                System.out.println("test");
+//            }
+//            for (int i : arena.getSpawns().keySet()) {
+//                Location loc = arena.getSpawns().get(i);
+//                if (playerNum == i) {
+//                    player.getPlayer().teleport(loc);
+//                }
+//            }
+//            for (int i = 0; i < arena.getSpawns().size(); i++) {
+//                Location loc  = arena.getSpawns(i);
+//                Player p = player.getPlayer();
+//                p.teleport(loc);
+//            }
 //            int numSpawns = arena.getSpawns();
 //            int randomIndex = new Random().nextInt(numSpawns);
 //            if (randomIndex < 0 || randomIndex >= 2) {
@@ -54,6 +86,7 @@ public class PreGame extends BukkitRunnable {
 //                Location loc = arena.getSpawns().get(i);
 //                player.teleport(loc);
 //            }
+            }
         }
     }
     @Override

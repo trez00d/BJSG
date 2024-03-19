@@ -130,6 +130,36 @@ public class EditCommand extends SubCommand {
 
             }
             if (args[0].equalsIgnoreCase("edit")) {
+                if (args[1].equalsIgnoreCase("addlobby")) {
+                    SpawnCreator spawnCreator = new SpawnCreator(plugin);
+
+                    String arenaID = args[2];
+                    Location lobbyLoc = player.getLocation();
+
+                    for (Arena a : plugin.activeArenas) {
+                        if (a.getId().equalsIgnoreCase(arenaID)) {
+
+                            a.removeLobbySpawns();
+                            String world = lobbyLoc.getWorld().getName();
+                            int x = lobbyLoc.getBlockX();
+                            int y = lobbyLoc.getBlockY();
+                            int z = lobbyLoc.getBlockZ();
+                            float pitch = lobbyLoc.getPitch();
+                            float yaw = lobbyLoc.getYaw();
+                            spawnCreator.createLobby(lobbyLoc, arenaID);
+                            player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "Lobby spawn set: " + arenaID + lobbyLoc);
+                            plugin.getConfig().set("lobby." + arenaID + ".world", world);
+                            plugin.getConfig().set("lobby." + arenaID + ".x", x);
+                            plugin.getConfig().set("lobby." + arenaID + ".y", y);
+                            plugin.getConfig().set("lobby." + arenaID + ".z", z);
+                            plugin.getConfig().set("lobby." + arenaID + ".pitch", pitch);
+                            plugin.getConfig().set("lobby." + arenaID + ".yaw", yaw);
+                            plugin.saveConfig();
+                        }
+                    }
+
+
+                }
                 if (args[1].equalsIgnoreCase("addspawn")) {
                     spawnInc++;
                     SpawnCreator spawnCreator = new SpawnCreator(plugin);
@@ -141,9 +171,22 @@ public class EditCommand extends SubCommand {
                         if (a.getId().equalsIgnoreCase(arenaID)) {
                             a.addSpawn(spawnInc, spawnLoc);
                             Location loc = a.getSpawns().get(spawnInc);
+                            String world = loc.getWorld().getName();
+                            int x = loc.getBlockX();
+                            int y = loc.getBlockY();
+                            int z = loc.getBlockZ();
+                            float pitch = loc.getPitch();
+                            float yaw = loc.getYaw();
                             LinkedHashMap<Integer, Location> arenaSpawn = a.getSpawns();
                             plugin.arenaSpawns.put(arenaID, arenaSpawn);
                             player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "Spawn point set: " + arenaID + ", " + spawnInc + ", " + loc);
+                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".world", world);
+                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".x", x);
+                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".y", y);
+                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".z", z);
+                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".pitch", pitch);
+                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".yaw", yaw);
+                            plugin.saveConfig();
                         }
                     }
 

@@ -12,6 +12,8 @@ public class Helper {
     public static void clearInventoryAndEffects(Player player) {
         clearInventory(player);
         clearPotionEffects(player);
+        player.setHealth(20);
+        player.setFoodLevel(20);
     }
 
     public static void clearInventory(Player player) {
@@ -24,4 +26,5 @@ public class Helper {
             player.removePotionEffect(effect.getType());
         }
     }
+
 }

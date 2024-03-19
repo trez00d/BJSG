@@ -23,6 +23,8 @@ public class CommandManager implements CommandExecutor {
         subCommandList.add(new GetPlayersCommand(plugin));
         subCommandList.add(new RegionCommand(plugin));
         subCommandList.add(new ListCommand(plugin));
+        subCommandList.add(new StopCommand(plugin));
+        subCommandList.add(new StartCommand(plugin));
 
 
     }

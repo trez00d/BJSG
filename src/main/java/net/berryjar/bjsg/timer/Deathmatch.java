@@ -26,6 +26,7 @@ public class Deathmatch extends BukkitRunnable {
     }
 
     public void startDeathmatch(int time) {
+        arena.broadcast(ChatHandler.chatPrefix + ChatColor.DARK_PURPLE + "Deathmatch has begun!");
         arena.setState(GameState.DEATHMATCH);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
@@ -35,21 +36,23 @@ public class Deathmatch extends BukkitRunnable {
 
         System.out.println("dm time == 0 && players size greater than 1");
         if (time == 0 && arena.getPlayers().size() > 1) {
+
             System.out.println("30");
             cancel();
             System.out.println("31");
             if (!arena.getPostGame().isRunning()) {
                 arena.getPostGame().startPostGame(15);
+                arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
                 return;
             }
             System.out.println("32");
-            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
+
             System.out.println("33");
             for (SGPlayer player : arena.getPlayers()) {
                 System.out.println("34");
                 arena.removePlayer(player);
                 System.out.println("35");
-
+                return;
             }
             return; // Get out of the run method.
 
@@ -61,6 +64,7 @@ public class Deathmatch extends BukkitRunnable {
             System.out.println("37");
             if (!arena.getPostGame().isRunning()) {
                 arena.getPostGame().startPostGame(30);
+                arena.broadcast(arena.getPlayers().get(0).toString() + " has won the game!");
                 return;
             }
 
