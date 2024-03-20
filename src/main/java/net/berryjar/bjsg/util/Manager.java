@@ -2,14 +2,9 @@ package net.berryjar.bjsg.util;
 
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
-import net.berryjar.bjsg.config.ConfigManager;
 import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class Manager {
 

@@ -21,14 +21,13 @@ public class LeaveListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        sgPlayer = sgPlayer.getSGPlayer(player.getUniqueId());
+        plugin.peelLooseWrapper(event.getPlayer().getUniqueId());
+        sgPlayer = sgPlayer.getSGPlayer(event.getPlayer().getUniqueId());
         Manager manager = new Manager(plugin);
-
         Arena arena = manager.getArena(sgPlayer);
         if (arena != null) {
             arena.removePlayer(sgPlayer);
-            arena.broadcast(ChatHandler.chatPrefix + ChatColor.RED + player.getName() + " left the server, so has been removed from the arena.");
+            arena.broadcast(ChatHandler.chatPrefix + ChatColor.RED + event.getPlayer().getName() + " left the server, so has been removed from the arena.");
         }
     }
 

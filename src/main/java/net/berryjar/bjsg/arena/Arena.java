@@ -2,6 +2,7 @@ package net.berryjar.bjsg.arena;
 
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.chat.ChatHandler;
+import net.berryjar.bjsg.chest.ChestManager;
 import net.berryjar.bjsg.cuboid.Cuboid;
 import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.timer.*;
@@ -24,6 +25,7 @@ public class Arena {
     private Deathmatch deathmatch;
     private PostGame postGame;
     private GameState state;
+    public ChestManager chestManager;
     public ArrayList<SGPlayer> players;
 //    public HashMap<Integer, UUID> playersLinkedID;
     private LinkedHashMap<Integer, Location> spawns;
@@ -39,7 +41,7 @@ public class Arena {
         this.arenaRegion = arenaRegion;
 //        this.playersLinkedID = new HashMap<Integer, UUID>();
         this.arenaID = arenaID;
-        this.requiredPlayers = 3;
+        this.requiredPlayers = 2;
         this.lobby = new Lobby(plugin, this);
         this.preGame = new PreGame(plugin, this);
         this.inGame = new InGame(plugin, this);
@@ -51,13 +53,23 @@ public class Arena {
         } else {
             this.spawns = plugin.getArenaSpawnsMap(arenaID);
         }
+        if (plugin.getLobbySpawns(arenaID) == null) {
+            this.lobbyLocation = new ArrayList<Location>();
+        } else {
+            Location loc = plugin.getLobbySpawns(arenaID);
+            this.lobbyLocation = new ArrayList<Location>();
+            this.lobbyLocation.add(loc);
+        }
         if (this.getPlayers() == null) {
             this.players = new ArrayList<SGPlayer>();
         }
-        this.lobbyLocation = new ArrayList<Location>();
 
 
 
+
+    }
+    public ArrayList<Location> getLobbySpawnMap() {
+        return lobbyLocation;
     }
 
     public void startArena() {
@@ -199,6 +211,7 @@ public class Arena {
     public void stopArena() {
 
         for (SGPlayer player : getPlayers()) {
+            broadcast(ChatHandler.chatPrefix + ChatColor.DARK_RED + "The game has been stopped by an administrator.");
             removePlayer(player);
         }
         if (getState() == GameState.LOBBY) {

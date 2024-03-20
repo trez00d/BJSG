@@ -3,13 +3,10 @@ package net.berryjar.bjsg.command.subcommand;
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.command.SubCommand;
-import net.berryjar.bjsg.config.ConfigManager;
 import net.berryjar.bjsg.cuboid.CuboidManager;
-import net.berryjar.bjsg.magicwand.MagicWand;
 import net.berryjar.bjsg.magicwand.WandManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class RegionCommand extends SubCommand {
 

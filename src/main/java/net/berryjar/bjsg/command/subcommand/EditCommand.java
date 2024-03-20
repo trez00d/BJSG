@@ -2,22 +2,19 @@ package net.berryjar.bjsg.command.subcommand;
 
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
-import net.berryjar.bjsg.arena.ArenaManager;
 import net.berryjar.bjsg.arena.SpawnCreator;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.command.SubCommand;
-import net.berryjar.bjsg.config.ConfigManager;
 import net.berryjar.bjsg.cuboid.CuboidManager;
 import net.berryjar.bjsg.magicwand.MagicWand;
 import net.berryjar.bjsg.magicwand.WandManager;
+import net.berryjar.bjsg.player.LooseWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.units.qual.A;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.UUID;
 
 public class EditCommand extends SubCommand {
 
@@ -25,9 +22,11 @@ public class EditCommand extends SubCommand {
 
     private int spawnInc = 0;
 
+
     public EditCommand(final BJSG plugin) {
         this.plugin = plugin;
     }
+
 
     @Override
     public String getName() {
@@ -46,6 +45,9 @@ public class EditCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
+
+
+        SpawnCreator spawnCreator = new SpawnCreator(plugin);
         WandManager wandManager = new WandManager(plugin);
         CuboidManager regionManager = new CuboidManager(plugin);
 
@@ -54,10 +56,17 @@ public class EditCommand extends SubCommand {
                 if (!(player.hasPermission("bjsg.edit"))) {
                     player.sendMessage(ChatHandler.chatPrefix + ChatHandler.noPerms);
                 } else if (player.hasPermission("bjsg.edit")) {
+                    for (UUID lW : plugin.looseWrapperPlayer) {
+                        if (lW.equals(player.getUniqueId())) {
+
+                        }
+                    }
                     MagicWand magicWand = new MagicWand();
                     ItemStack wandStack = magicWand.getMagicWand();
                     wandManager.setPrimed(player);
                     player.getInventory().addItem(wandStack);
+                    System.out.printf("LOOT CONFIG CREATE");
+
                     player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You have entered arena creation mode.");
                 }
             }
@@ -80,11 +89,8 @@ public class EditCommand extends SubCommand {
                     player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You have exited arena creation mode.");
                     player.sendMessage("5");
                     MagicWand magicWand = new MagicWand();
-                    player.sendMessage("6");
                     ItemStack wandStack = magicWand.getMagicWand();
-                    player.sendMessage("7");
                     player.getInventory().remove(wandStack);
-                    player.sendMessage("8");
 
                 }
 
@@ -96,6 +102,9 @@ public class EditCommand extends SubCommand {
                 else if (player.hasPermission("bjsg.edit")) {
                     player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
                 }
+            }
+            if (args[1].equalsIgnoreCase("delspawn")) {
+                player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
             }
 //            if (args[0].equalsIgnoreCase("create")) {
 //                if (!(player.hasPermission("bjsg.edit"))) {
@@ -131,7 +140,6 @@ public class EditCommand extends SubCommand {
             }
             if (args[0].equalsIgnoreCase("edit")) {
                 if (args[1].equalsIgnoreCase("addlobby")) {
-                    SpawnCreator spawnCreator = new SpawnCreator(plugin);
 
                     String arenaID = args[2];
                     Location lobbyLoc = player.getLocation();
@@ -161,46 +169,10 @@ public class EditCommand extends SubCommand {
 
                 }
                 if (args[1].equalsIgnoreCase("addspawn")) {
-                    spawnInc++;
-                    SpawnCreator spawnCreator = new SpawnCreator(plugin);
-
-                    String arenaID = args[2];
-                    Location spawnLoc = player.getLocation();
-                    spawnCreator.createSpawn(spawnLoc, arenaID);
-                    for (Arena a : plugin.activeArenas) {
-                        if (a.getId().equalsIgnoreCase(arenaID)) {
-                            a.addSpawn(spawnInc, spawnLoc);
-                            Location loc = a.getSpawns().get(spawnInc);
-                            String world = loc.getWorld().getName();
-                            int x = loc.getBlockX();
-                            int y = loc.getBlockY();
-                            int z = loc.getBlockZ();
-                            float pitch = loc.getPitch();
-                            float yaw = loc.getYaw();
-                            LinkedHashMap<Integer, Location> arenaSpawn = a.getSpawns();
-                            plugin.arenaSpawns.put(arenaID, arenaSpawn);
-                            player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "Spawn point set: " + arenaID + ", " + spawnInc + ", " + loc);
-                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".world", world);
-                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".x", x);
-                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".y", y);
-                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".z", z);
-                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".pitch", pitch);
-                            plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".yaw", yaw);
-                            plugin.saveConfig();
-                        }
-                    }
-
-
+                    player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
                 }
                 if (args[1].equalsIgnoreCase("delspawn")) {
-                    String arenaID = args[2];
-                    Location spawnLoc = player.getLocation();
-                    spawnInc--;
-                    for (Arena a : plugin.activeArenas) {
-                        if (a.getId().equalsIgnoreCase(arenaID)) {
-                            a.removeSpawn();
-                        }
-                    }
+                    player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
                 }
                 if (args[1].equalsIgnoreCase("listspawns")) {
                     String arenaID = args[2];
@@ -212,6 +184,22 @@ public class EditCommand extends SubCommand {
                 }
             }
 
+        }
+        if (args.length == 4) {
+            if (args[1].equalsIgnoreCase("addspawn")) {
+                String arenaID = args[2];
+                int spawnID = Integer.parseInt(args[3]);
+                Location spawnLoc = player.getLocation();
+                spawnCreator.createSpawn(spawnLoc, arenaID, spawnID);
+                player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "Spawn point added: " + arenaID + ", " + spawnInc + ", " + spawnLoc);
+//
+            }
+            if (args[1].equalsIgnoreCase("delspawn")) {
+                String arenaID = args[2];
+                int spawnID = Integer.parseInt(args[3]);
+                spawnCreator.removeSpawn(arenaID, spawnID);
+                player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "Spawn point removed: " + arenaID + ", " + spawnID);
+            }
         }
 
     }

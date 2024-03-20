@@ -71,7 +71,7 @@ public class JoinCommand extends SubCommand {
                                     a.addPlayer(player.getUniqueId());
                                     player.teleport(a.getLobbySpawn());
                                     player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You joined arena " + arenaID + ".");
-                                } else if (!(a.getState() == GameState.LOBBY)) {
+                                } else {
                                     player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "This game has already started.");
                                 }
 
