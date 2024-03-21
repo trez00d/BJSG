@@ -45,7 +45,7 @@ public class InGame extends BukkitRunnable {
 
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
             arena.getPostGame().startPostGame(15);
-            for (SGPlayer player : arena.getPlayers()) {
+            for (UUID player : arena.getPlayers()) {
                 arena.removePlayer(player);
             }
             return; // Get out of the run method.
@@ -59,8 +59,8 @@ public class InGame extends BukkitRunnable {
                 return;
             }
 
-            SGPlayer sgWinner = arena.players.get(0);
-            Player winner = sgWinner.getPlayer();
+            UUID sgWinner = arena.players.get(0);
+            Player winner = Bukkit.getPlayer(sgWinner);
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
             arena.removePlayer(sgWinner);
             return;

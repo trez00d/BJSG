@@ -54,8 +54,8 @@ public class PreDeathmatch extends BukkitRunnable {
 
         System.out.println("predm players size == 1");
         if (arena.getPlayers().size() == 1) {
-            SGPlayer sgWinner = (arena.players.get(0));
-            Player winner = sgWinner.getPlayer();
+            UUID sgWinner = (arena.players.get(0));
+            Player winner = Bukkit.getPlayer(sgWinner);
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
             arena.removePlayer(sgWinner);
             cancel();

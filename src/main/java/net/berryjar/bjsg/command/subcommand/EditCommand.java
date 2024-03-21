@@ -45,6 +45,7 @@ public class EditCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
+        UUID u = player.getUniqueId();
 
 
         SpawnCreator spawnCreator = new SpawnCreator(plugin);
@@ -56,18 +57,19 @@ public class EditCommand extends SubCommand {
                 if (!(player.hasPermission("bjsg.edit"))) {
                     player.sendMessage(ChatHandler.chatPrefix + ChatHandler.noPerms);
                 } else if (player.hasPermission("bjsg.edit")) {
-                    for (UUID lW : plugin.looseWrapperPlayer) {
-                        if (lW.equals(player.getUniqueId())) {
+                    plugin.grantMagicWand(player.getUniqueId());
+//                    for (UUID lW : plugin.looseWrapperPlayer) {
+//                        if (lW.equals(player.getUniqueId())) {
+//
+//                        }
+//                    }
+//                    MagicWand magicWand = new MagicWand();
+//                    ItemStack wandStack = magicWand.getMagicWand();
+//                    wandManager.setPrimed(player);
+//                    player.getInventory().addItem(wandStack);
+//                    System.out.printf("LOOT CONFIG CREATE");
 
-                        }
-                    }
-                    MagicWand magicWand = new MagicWand();
-                    ItemStack wandStack = magicWand.getMagicWand();
-                    wandManager.setPrimed(player);
-                    player.getInventory().addItem(wandStack);
-                    System.out.printf("LOOT CONFIG CREATE");
-
-                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You have entered arena creation mode.");
+                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You have been given the " + ChatColor.ITALIC + "Region Wand" + ChatColor.RESET + ChatColor.GOLD + ".");
                 }
             }
 
@@ -78,16 +80,11 @@ public class EditCommand extends SubCommand {
                 player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
             }
             if (args[1].equalsIgnoreCase("exit")) {
-                player.sendMessage("1");
                 if (!(player.hasPermission("bjsg.edit"))) {
-                    player.sendMessage("2");
                     player.sendMessage(ChatHandler.chatPrefix + ChatHandler.noPerms);
                 } if (player.hasPermission("bjsg.edit")) {
-                    player.sendMessage("3");
                     wandManager.removePrimed(player);
-                    player.sendMessage("4");
                     player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You have exited arena creation mode.");
-                    player.sendMessage("5");
                     MagicWand magicWand = new MagicWand();
                     ItemStack wandStack = magicWand.getMagicWand();
                     player.getInventory().remove(wandStack);
@@ -146,8 +143,6 @@ public class EditCommand extends SubCommand {
 
                     for (Arena a : plugin.activeArenas) {
                         if (a.getId().equalsIgnoreCase(arenaID)) {
-
-                            a.removeLobbySpawns();
                             String world = lobbyLoc.getWorld().getName();
                             int x = lobbyLoc.getBlockX();
                             int y = lobbyLoc.getBlockY();

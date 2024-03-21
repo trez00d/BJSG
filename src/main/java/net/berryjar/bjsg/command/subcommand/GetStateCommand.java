@@ -52,20 +52,15 @@ public class GetStateCommand extends SubCommand {
         }
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("getstate")) {
-                player.sendMessage("1");
                 String arenaID = args[1];
-                player.sendMessage("2");
                 ArenaManager arenaManager = new ArenaManager(plugin);
                 for (Arena a : plugin.activeArenas) {
                     if (arenaManager.getArenaID(a).equalsIgnoreCase(arenaID)) {
-                        player.sendMessage("3");
                         if (a.getId().equalsIgnoreCase(arenaID)) {
                             player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + a.getState());
                         } else {
                             player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
                         }
-                    } else {
-                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
                     }
                 }
 //                    player.sendMessage("3");

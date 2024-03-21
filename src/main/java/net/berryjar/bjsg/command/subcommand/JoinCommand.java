@@ -56,34 +56,32 @@ public class JoinCommand extends SubCommand {
         }
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("join")) {
-                player.sendMessage("1");
+                System.out.println("JoinCommand 59");
                 String arenaID = args[1];
-                player.sendMessage("2");
                 ArenaManager arenaManager = new ArenaManager(plugin);
                 for (Arena a : plugin.activeArenas) {
-                    if (arenaManager.getArenaID(a).equalsIgnoreCase(arenaID)) {
-                        player.sendMessage("3");
+                    System.out.println("JoinCommand 63");
+                    if (plugin.activeArenas.contains(a)) {
+                        System.out.println("JoinCommand 65");
                         if (a.getId().equalsIgnoreCase(arenaID)) {
-                            if (a.getPlayers().contains(player.getUniqueId())) {
-                                player.sendMessage(ChatHandler.chatPrefix + "You already joined an arena.");
+                            System.out.println("JoinCommand 67");
+                            if (a.getState() == GameState.LOBBY) {
+                                System.out.println("JoinCommand 69");
+                                a.addPlayer(player.getUniqueId());
+                                player.teleport(a.getLobbyLocation());
+                                player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You joined arena " + arenaID + ".");
                             } else {
-                                if (a.getState() == GameState.LOBBY) {
-                                    a.addPlayer(player.getUniqueId());
-                                    player.teleport(a.getLobbySpawn());
-                                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You joined arena " + arenaID + ".");
-                                } else {
-                                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "This game has already started.");
-                                }
-
+                                player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "This game has already started.");
                             }
 
-                        } else {
-                            player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
+
                         }
+
                     } else {
-                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
+                        return;
                     }
                 }
+            }
 //                    player.sendMessage("3");
 //                    if (a.getId().equalsIgnoreCase(arenaID)) {
 //                        player.sendMessage("4");
@@ -97,9 +95,9 @@ public class JoinCommand extends SubCommand {
 //                        player.sendMessage("8");
 //                    }
 //                }
-            }
-
         }
+
+    }
 //        else if (args.length == 1) {
 //            if (!manager.isArena(args[1])) {
 //                player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + args[1] + " doesn't ring a bell.");
@@ -121,5 +119,5 @@ public class JoinCommand extends SubCommand {
 //        }
 
 
-    }
 }
+

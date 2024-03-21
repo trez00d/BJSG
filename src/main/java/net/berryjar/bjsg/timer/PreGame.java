@@ -28,20 +28,19 @@ public class PreGame extends BukkitRunnable {
     }
 
     public void startPreGame(int time) {
+
         arena.setState(GameState.PREGAME);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
         arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "Lobby time has ended. The game will start soon.");
 
-        for (SGPlayer player : arena.getPlayers()) {
-            int playerNum = player.getID();
-            System.out.println(arena.getSpawns());
-            System.out.println(player.getPlayer().getName() + " " + playerNum);
+        for (UUID player : arena.getPlayers()) {
+            int playerNum = arena.intPlayers.get(player);
             for (Arena a : plugin.activeArenas) {
                 if (a.getSpawns().containsKey(playerNum)) {
-                    Helper.clearInventoryAndEffects(player.getPlayer());
-                    Helper.clearPotionEffects(player.getPlayer());
-                    player.getPlayer().teleport(a.getSpawn(playerNum));
+                    Helper.clearInventoryAndEffects(Bukkit.getPlayer(player));
+                    Helper.clearPotionEffects(Bukkit.getPlayer(player));
+                    Bukkit.getPlayer(player).teleport(a.getSpawn(playerNum));
                 }
 //            for (int i = 0; i < arena.getSpawns().size(); i++) {
 //                Location loc = arena.getSpawn(i);

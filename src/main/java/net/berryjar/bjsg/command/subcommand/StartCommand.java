@@ -63,10 +63,10 @@ public class StartCommand extends SubCommand {
                                 player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "This arena is already started.");
                             } else {
                                 if (a.getState() == GameState.STOPPED) {
-                                    Arena arenaNew = new Arena(plugin, a.getArenaRegion(), a.getId());
-                                    arenaNew.getLobby().startLobby(15);
                                     plugin.activeArenas.remove(a);
-
+                                    Arena arenaNew = new Arena(plugin, a.getArenaRegion(), a.getId());
+                                    arenaNew.startArena();
+                                    arenaNew.getLobby().startLobby(15);
                                     plugin.activeArenas.add(arenaNew);
                                     player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "Arena " + arenaID + " started.");
                                 }

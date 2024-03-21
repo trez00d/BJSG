@@ -26,67 +26,105 @@ public class Arena {
     private PostGame postGame;
     private GameState state;
     public ChestManager chestManager;
-    public ArrayList<SGPlayer> players;
+    public ArrayList<UUID> players;
+    public HashMap<UUID, Integer> intPlayers;
 //    public HashMap<Integer, UUID> playersLinkedID;
-    private LinkedHashMap<Integer, Location> spawns;
-    private ArrayList<Location> lobbyLocation;
+    public LinkedHashMap<Integer, Location> spawns;
+
+
+
+    Location lobbyLocation;
     private int lastSpawn;
     private final String arenaID;
     private final int requiredPlayers;
     private int playerID;
 
     public Arena(final BJSG plugin, Cuboid arenaRegion, String arenaID) {
+        this.players = new ArrayList<UUID>();
+        System.out.println("ARENA CONST " + players);
+        this.intPlayers = new HashMap<UUID, Integer>();
+        System.out.println("ARENA CONST " + intPlayers);
         this.playerID = 1;
+        System.out.println("ARENA CONST " + playerID);
         this.plugin = plugin;
+        System.out.println("ARENA CONST " + plugin);
         this.arenaRegion = arenaRegion;
+        System.out.println("ARENA CONST " + arenaRegion);
+
 //        this.playersLinkedID = new HashMap<Integer, UUID>();
         this.arenaID = arenaID;
+        System.out.println("ARENA CONST " + arenaID);
         this.requiredPlayers = 2;
+        System.out.println("ARENA CONST " + requiredPlayers);
         this.lobby = new Lobby(plugin, this);
         this.preGame = new PreGame(plugin, this);
         this.inGame = new InGame(plugin, this);
         this.preDeathmatch = new PreDeathmatch(plugin, this);
         this.deathmatch = new Deathmatch(plugin, this);
         this.postGame = new PostGame(plugin, this);
-        if (plugin.getArenaSpawnsMap(arenaID) == null) {
-            this.spawns = new LinkedHashMap<Integer, Location>();
-        } else {
-            this.spawns = plugin.getArenaSpawnsMap(arenaID);
-        }
-        if (plugin.getLobbySpawns(arenaID) == null) {
-            this.lobbyLocation = new ArrayList<Location>();
-        } else {
-            Location loc = plugin.getLobbySpawns(arenaID);
-            this.lobbyLocation = new ArrayList<Location>();
-            this.lobbyLocation.add(loc);
-        }
-        if (this.getPlayers() == null) {
-            this.players = new ArrayList<SGPlayer>();
-        }
+        this.spawns = new LinkedHashMap<Integer, Location>();
+
+//        if (this.spawns == null) {
+//            this.spawns = plugin.getArenaSpawnsMap(this.arenaID);
+//        }
+//        if (this.lobbyLocation == null) {
+//            this.lobbyLocation = plugin.getLobbySpawns(arenaID);
+//        }
+//        if (!(this.getId() == null)) {
+//            return;
+////            this.lobbyLocation = new ArrayList<Location>();
+//        } else {
+//            Location loc = plugin.getLobbySpawns(arenaID);
+////            this.lobbyLocation = new ArrayList<Location>();
+//            this.lobbyLocation = loc;
+//            if (!(plugin.arenaLobbies.containsKey(this.arenaID))) {
+//                plugin.arenaLobbies.put(this.arenaID, loc);
+//            }
+//
+//        }
+//        if (this.players == null) {
+//            this.players = new ArrayList<SGPlayer>();
+//        }
+
+
+
 
 
 
 
     }
-    public ArrayList<Location> getLobbySpawnMap() {
-        return lobbyLocation;
-    }
+//    public ArrayList<Location> getLobbySpawnMap() {
+//        return lobbyLocation;
+//    }
 
     public void startArena() {
+//        plugin.activeArenas.add(this);
+
 
     }
     public Lobby getLobby() {
         return lobby;
     }
-    public Location getLobbySpawn() {
-        return lobbyLocation.get(0);
+    public Location getLobbyLocation() {
+        return lobbyLocation;
     }
-    public int getLobbySetSize() {
-        return lobbyLocation.size();
+
+    public void setLobby(Location loc) {
+        this.lobbyLocation = loc;
     }
-    public void removeLobbySpawns() {
-        lobbyLocation.clear();
+
+    public void addSpawns(int num, Location loc) {
+        spawns.put(num, loc);
     }
+//    public Location getLobbySpawn() {
+//        return lobbyLocation.get(0);
+//    }
+//    public int getLobbySetSize() {
+//        return lobbyLocation.size();
+//    }
+//    public void removeLobbySpawns() {
+//        lobbyLocation.clear();
+//    }
 
     public InGame getInGame() {
         return inGame;
@@ -108,7 +146,7 @@ public class Arena {
     public void setState(GameState state) {
         this.state = state;
     }
-    public boolean contains(SGPlayer player) {
+    public boolean contains(UUID player) {
         return players.contains(player);
     }
     public String getId() {
@@ -116,8 +154,12 @@ public class Arena {
     }
     public void broadcast(String message) {
 
-        for (SGPlayer player : players) {
-            Player p = player.getPlayer();
+
+        for (UUID player : players) {
+            if (player == null) {
+                return;
+            }
+            Player p = Bukkit.getPlayer(player);
             p.sendMessage(message);
         }
 //        for (int i = 0; i < players.size(); i++) {
@@ -125,7 +167,7 @@ public class Arena {
 //            Bukkit.getPlayer(players.get(i)).sendMessage(message);
 //        }
     }
-    public ArrayList<SGPlayer> getPlayers() {
+    public ArrayList<UUID> getPlayers() {
         return players;
     }
 
@@ -143,18 +185,26 @@ public class Arena {
     }
 
     public void addPlayer(UUID uuid) {
+
         int i = playerID++;
-        SGPlayer player = new SGPlayer(plugin, this.arenaID, uuid, i);
-        players.add(player);
+//        System.out.println("SANSAN");
+//        System.out.println(players);
+        players.add(uuid);
+        intPlayers.put(uuid, playerID);
         // Check whether to start the countdown. Make sure that the countdown
         // isn't already running.
+//        System.out.println("add player test");
+//        System.out.println(lobby.isRunning());
+//        System.out.println(players.size());
         if (!lobby.isRunning() && players.size() >= requiredPlayers) {
+
+//            System.out.println("add player test");
             lobby.startLobby(30);
         }
         Helper.clearInventoryAndEffects(Bukkit.getPlayer(uuid));
 
     }
-    public void removePlayer(SGPlayer player) {
+    public void removePlayer(UUID player) {
         players.remove(player);
         // Remove the kit data for the UUID from the arena.
 
@@ -166,7 +216,7 @@ public class Arena {
             inGame.cancel();
 
             // Get the last player.
-            Player winner = Bukkit.getPlayer(players.get(0).getPlayerUUID());
+            Player winner = Bukkit.getPlayer(players.get(0));
             broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
 //            Bukkit.broadcastMessage(
 //                    ChatColor.GREEN + "" + ChatColor.BOLD + winner.getName() + " won arena " + arenaID + "!");
@@ -181,25 +231,24 @@ public class Arena {
     public LinkedHashMap<Integer, Location> getSpawns() {
         return spawns;
     }
-    public Location getSpawn(int input) {
-        System.out.println("gs1");
-        System.out.println(input);
-        for (int i : spawns.keySet()) {
-            System.out.println("gs2");
-            System.out.println(i);
-            if (input == i) {
-                System.out.println("gs3");
-                System.out.println(spawns.get(i));
-                return spawns.get(i);
+    public Location getSpawn(Integer spawnID) {
+        for (Integer ID : spawns.keySet()) {
+//            System.out.println(spawns.keySet());
+//            System.out.println("gs2");
+//            System.out.println(ID);
+            if (spawnID.equals(ID)) {
+//                System.out.println("gs3");
+//                System.out.println(spawns.get(ID));
+                return spawns.get(ID);
 
 
             }
         }
         return null;
     }
-    public void addSpawn(int i, Location loc) {
-        spawns.put(i, loc);
-        this.lastSpawn = i;
+    public void addSpawn(int spawnID, Location loc) {
+        spawns.put(spawnID, loc);
+//        this.lastSpawn = i;
     }
     public void removeSpawn() {
         int spawn = lastSpawn;
@@ -210,7 +259,7 @@ public class Arena {
     }
     public void stopArena() {
 
-        for (SGPlayer player : getPlayers()) {
+        for (UUID player : getPlayers()) {
             broadcast(ChatHandler.chatPrefix + ChatColor.DARK_RED + "The game has been stopped by an administrator.");
             removePlayer(player);
         }
@@ -230,15 +279,15 @@ public class Arena {
         setState(GameState.STOPPED);
     }
 
-    public void setLobbyNull() {
-        this.lobby = null;
-    }
-    public void setLobbyRunnable() {
-        this.lobby = new Lobby(plugin, this);
-    }
-    public int getLastSpawn() {
-        return lastSpawn;
-    }
+//    public void setLobbyNull() {
+//        this.lobby = null;
+//    }
+//    public void setLobbyRunnable() {
+//        this.lobby = new Lobby(plugin, this);
+//    }
+//    public int getLastSpawn() {
+//        return lastSpawn;
+//    }
 
 
 }

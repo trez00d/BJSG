@@ -30,13 +30,12 @@ public class ListCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        player.sendMessage("1");
+//        if (plugin.sgPlayers.containsKey(player.getUniqueId())) {
+//            player.sendMessage();
+//        }
         if (args.length == 2) {
-            player.sendMessage("2");
             if(args[0].equalsIgnoreCase("arena")) {
-                player.sendMessage("3");
                 if (args[1].equalsIgnoreCase("list")) {
-                    player.sendMessage("4");
                     for (Arena a : plugin.activeArenas) {
                         player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + a);
                         player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + a.getId());

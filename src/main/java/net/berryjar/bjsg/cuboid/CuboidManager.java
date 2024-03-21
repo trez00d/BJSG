@@ -84,11 +84,13 @@ public class CuboidManager {
             int z2 = builder.getZ2();
 
             Cuboid cuboid = new Cuboid(rID, world, x1, y1, z1, x2, y2, z2);
-            Arena arena = new Arena(plugin, cuboid, rID);
-            arena.getLobby().startLobby(15);
             cuboid.setRegionID(rID);
+            Arena arena = new Arena(plugin, cuboid, rID);
+            arena.startArena();
             plugin.activeRegions.add(cuboid);
-            plugin.activeArenas.add(arena);
+
+            arena.getLobby().startLobby(15);
+//            plugin.activeArenas.add(arena);
 
         }
     }

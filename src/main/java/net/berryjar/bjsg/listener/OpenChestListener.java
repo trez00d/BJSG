@@ -19,7 +19,7 @@ public class OpenChestListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler()
     public void onPlayerChestOpen(InventoryOpenEvent event) {
         System.out.println("LISTENER TEST");
 

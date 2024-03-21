@@ -6,6 +6,8 @@ import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import java.util.UUID;
+
 public class Manager {
 
     private final BJSG plugin;
@@ -74,11 +76,11 @@ public class Manager {
         return getArena(id) != null;
     }
 
-    public Arena getArena(SGPlayer sgPlayer) {
+    public Arena getArena(UUID player) {
         for (int i = 0; i < plugin.activeArenas.size(); i++) {
             final Arena arena = plugin.activeArenas.get(i);
 
-            if (arena.contains(sgPlayer)) {
+            if (arena.contains(player)) {
                 return arena;
             }
         }

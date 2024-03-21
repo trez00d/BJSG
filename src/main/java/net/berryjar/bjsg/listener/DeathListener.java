@@ -24,14 +24,13 @@ public class DeathListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        sgPlayer = sgPlayer.getSGPlayer(player.getUniqueId());
         event.setDeathMessage(null);
         Manager manager = new Manager(plugin);
 
-        Arena arena = manager.getArena(sgPlayer);
+        Arena arena = manager.getArena(player.getUniqueId());
         if (arena != null) {
             // Remove the player from the arena.
-            arena.removePlayer(sgPlayer);
+            arena.removePlayer(player.getUniqueId());
 
             if (player.getKiller() != null) {
                 Player killer = player.getKiller();

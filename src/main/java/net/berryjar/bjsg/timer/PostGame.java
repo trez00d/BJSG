@@ -6,9 +6,11 @@ import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.units.qual.A;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public class PostGame extends BukkitRunnable {
@@ -28,6 +30,7 @@ public class PostGame extends BukkitRunnable {
         arena.setState(GameState.POSTGAME);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
+        arena.players.clear();
     }
 
     @Override
@@ -36,34 +39,42 @@ public class PostGame extends BukkitRunnable {
         System.out.println("postgame time == 0");
         if (time == 0) {
             cancel();
-            for (SGPlayer player : arena.getPlayers()) {
+            for (UUID player : arena.getPlayers()) {
                 arena.removePlayer(player);
             }
-            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
-            arenaNew.getLobby().startLobby(15);
+            arena.players.clear();
             plugin.activeArenas.remove(arena);
+            Location lobLoc = arena.getLobbyLocation();
+            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
+            arenaNew.setLobby(lobLoc);
+            arenaNew.startArena();
 
-            plugin.activeArenas.add(arenaNew);
+            arenaNew.getLobby().startLobby(15);
+
             return;
         }
         if (time == 0 && arena.getPlayers().size() > 1) {
             cancel();
-            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
-            arenaNew.getLobby().startLobby(15);
             plugin.activeArenas.remove(arena);
+            Location lobLoc = arena.getLobbyLocation();
+            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
+            arenaNew.setLobby(lobLoc);
+            arenaNew.startArena();
+            arenaNew.getLobby().startLobby(15);
 
-            plugin.activeArenas.add(arenaNew);
+
 
             return; // Get out of the run method.
 
         }
         if (arena.getPlayers().size() == 1) {
             cancel();
-            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
-            arenaNew.getLobby().startLobby(15);
             plugin.activeArenas.remove(arena);
-
-            plugin.activeArenas.add(arenaNew);
+            Location lobLoc = arena.getLobbyLocation();
+            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
+            arenaNew.setLobby(lobLoc);
+            arenaNew.startArena();
+            arenaNew.getLobby().startLobby(15);
             return;
         }
 

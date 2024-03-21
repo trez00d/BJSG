@@ -1,8 +1,11 @@
 package net.berryjar.bjsg.arena;
 
+import org.bukkit.World;
+
 public class ArenaBuilder {
 
     String world;
+    World worldWorld;
     String arenaID;
     int x;
     int y;
@@ -14,8 +17,14 @@ public class ArenaBuilder {
     public String getWorld() {
         return world;
     }
+    public World getWorldWorld() {
+        return worldWorld;
+    }
     public void setWorld(String world) {
         this.world = world;
+    }
+    public void setWorld(World world) {
+        this.worldWorld = world;
     }
 
     public void setArenaID(String regionID) {

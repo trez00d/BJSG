@@ -11,9 +11,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.UUID;
+
 public class LeaveListener implements Listener {
     private final BJSG plugin;
-    private SGPlayer sgPlayer;
+    private UUID player;
 
     public LeaveListener(final BJSG plugin) {
         this.plugin = plugin;
@@ -22,11 +24,10 @@ public class LeaveListener implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         plugin.peelLooseWrapper(event.getPlayer().getUniqueId());
-        sgPlayer = sgPlayer.getSGPlayer(event.getPlayer().getUniqueId());
         Manager manager = new Manager(plugin);
-        Arena arena = manager.getArena(sgPlayer);
+        Arena arena = manager.getArena(player);
         if (arena != null) {
-            arena.removePlayer(sgPlayer);
+            arena.removePlayer(player);
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.RED + event.getPlayer().getName() + " left the server, so has been removed from the arena.");
         }
     }

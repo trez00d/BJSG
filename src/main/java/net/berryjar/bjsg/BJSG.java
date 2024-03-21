@@ -3,16 +3,24 @@ package net.berryjar.bjsg;
 import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.arena.ArenaManager;
 import net.berryjar.bjsg.chest.ChestManager;
+import net.berryjar.bjsg.chest.LootItem;
 import net.berryjar.bjsg.command.CommandManager;
 import net.berryjar.bjsg.cuboid.Cuboid;
 import net.berryjar.bjsg.cuboid.CuboidManager;
 import net.berryjar.bjsg.listener.*;
+import net.berryjar.bjsg.magicwand.MagicWand;
 import net.berryjar.bjsg.magicwand.Tuple;
 import net.berryjar.bjsg.magicwand.WandManager;
+import net.berryjar.bjsg.player.LooseWrapper;
 import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.util.Manager;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.*;
@@ -29,6 +37,7 @@ public final class BJSG extends JavaPlugin {
     public OpenChestListener openChestListener;
     public ChestManager chestManager;
     public WandManager wandManager;
+    public MagicWand magicWand;
     public ArrayList<Arena> activeArenas = new ArrayList<Arena>();
     public HashSet<Cuboid> activeRegions = new HashSet<Cuboid>();
     public HashSet<UUID> wandPrime = new HashSet<UUID>();
@@ -38,6 +47,13 @@ public final class BJSG extends JavaPlugin {
     public HashSet<SGPlayer> sgPlayers = new HashSet<SGPlayer>();
     public HashSet<UUID> looseWrapperPlayer = new HashSet<UUID>();
 
+
+    public void grantMagicWand(UUID u) {
+        Bukkit.getPlayer(u).getInventory().addItem(magicWand.getMagicWand());
+    }
+    public ItemStack getMagicWand() {
+        return this.magicWand.getMagicWand();
+    }
 
     public void createLooseWrapper(UUID u) {
         looseWrapperPlayer.add(u);
@@ -77,6 +93,7 @@ public final class BJSG extends JavaPlugin {
         arenaManager = new ArenaManager(this);
         playerWandInteract = new PlayerWandInteract(this);
         openChestListener = new OpenChestListener(this);
+        magicWand = new MagicWand();
 //        conMan = new ConMan(this);
 //        saveResource("loot.yml", false);
         getServer().getPluginManager().registerEvents(new DeathListener(this), this);
@@ -105,8 +122,41 @@ public final class BJSG extends JavaPlugin {
 //        FileConfiguration conf = conMan.getLootConfig();
 
 
+
+//        System.out.println("test" + spawns.toString());
         regionManager.loadRegions();
-        arenaManager.loadArenaSpawns();
+        arenaManager.loadArenaSpawns(getConfig());
+        arenaManager.loadLobbySpawns(getConfig());
+
+
+
+
+
+//        System.out.println("from BJSG: " + arenaLobbies);
+//
+//        System.out.println(arenaSpawns);
+//        for (String arenaID : spawnsa.getKeys(false)) {
+//            ConfigurationSection arena = getConfig().getConfigurationSection(arenaID);
+//            System.out.println(arena);
+//        }
+//        for (String spawns : getConfig().getConfigurationSection("spawns").getKeys(false)) {
+//            System.out.println("test " + spawns);
+//
+//            ConfigurationSection spawnsSec = getConfig().getConfigurationSection(spawns);
+//            System.out.println("test test " + spawnsSec);
+////            for (String arenaID : spawnsSec.getKeys(false)) {
+////                ConfigurationSection arenaSec = getConfig().getConfigurationSection(arenaID);
+////                arenaManager.loadArenaSpawns(arenaSec);
+////            }
+////        }
+////        for (String spawns : getConfig().getConfigurationSection("spawns").getKeys(false)) {
+////            ConfigurationSection lobbySec = getConfig().getConfigurationSection(spawns);
+////            for (String arenaID : lobbySec.getKeys(false)) {
+////                ConfigurationSection arenaSec = getConfig().getConfigurationSection(arenaID);
+////                arenaManager.loadLobbySpawns(arenaSec);
+////            }
+//        }
+
 
     }
 
