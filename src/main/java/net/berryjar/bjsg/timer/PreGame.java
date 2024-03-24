@@ -9,6 +9,7 @@ import net.berryjar.bjsg.util.Helper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -35,13 +36,28 @@ public class PreGame extends BukkitRunnable {
         arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "Lobby time has ended. The game will start soon.");
 
         for (UUID player : arena.getPlayers()) {
+            Player p = Bukkit.getPlayer(player);
+            System.out.println("pregame 1");
             int playerNum = arena.intPlayers.get(player);
+            System.out.println(player + String.valueOf(playerNum));
             for (Arena a : plugin.activeArenas) {
-                if (a.getSpawns().containsKey(playerNum)) {
-                    Helper.clearInventoryAndEffects(Bukkit.getPlayer(player));
-                    Helper.clearPotionEffects(Bukkit.getPlayer(player));
-                    Bukkit.getPlayer(player).teleport(a.getSpawn(playerNum));
+                System.out.println("pregame 2");
+                if (arena.getId().equals(a.getId())) {
+                    plugin.arenaSpawns.put(a.getId(), a.getSpawns());
+                    System.out.println("pregame 3");
+                    if (a.getSpawns().containsKey(playerNum)) {
+                        System.out.println("pregame 4");
+                        Helper.clearInventoryAndEffects(Bukkit.getPlayer(player));
+                        Helper.clearPotionEffects(Bukkit.getPlayer(player));
+                        System.out.println(playerNum);
+                        System.out.println(a.getSpawns());
+                        System.out.println(a.getSpawn(playerNum));
+                        Location spawnLoc = a.getSpawn(playerNum);
+                        p.teleport(spawnLoc);
+//                        Bukkit.getPlayer(player).teleport(a.getSpawn(playerNum));
+                    }
                 }
+
 //            for (int i = 0; i < arena.getSpawns().size(); i++) {
 //                Location loc = arena.getSpawn(i);
 //                System.out.println(loc);
@@ -90,6 +106,10 @@ public class PreGame extends BukkitRunnable {
     }
     @Override
     public void run() {
+        if (arena.getPlayers().isEmpty()) {
+            cancel();
+            arena.getPostGame().startPostGame(15);
+        }
 
         if (time == 0) {
 
@@ -108,8 +128,10 @@ public class PreGame extends BukkitRunnable {
             // message.
             if (time != 1) {
                 arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + "Game will start in " + time + " seconds.");
+                arena.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
             } else {
                 arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + "Game will start in " + time + " second.");
+                arena.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
             }
         }
 

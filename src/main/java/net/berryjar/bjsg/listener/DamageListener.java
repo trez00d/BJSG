@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import java.util.UUID;
+
 public class DamageListener implements Listener {
 
     private final BJSG plugin;
@@ -21,9 +23,22 @@ public class DamageListener implements Listener {
     public void PlayerDamageEvent(EntityDamageByEntityEvent event) {
 
         Player attacker = (Player) event.getDamager();
+        System.out.println("damage1");
         for (Arena a : plugin.activeArenas) {
+            System.out.println("damage2");
             if (a.getState() == GameState.LOBBY || a.getState() == GameState.PREGAME || a.getState() == GameState.POSTGAME) {
-                event.setCancelled(true);
+                for (UUID u : a.getPlayers()) {
+                    System.out.println("damage3");
+                    if (a.getPlayers().contains(u)) {
+                        if (a.getState() == GameState.LOBBY || a.getState() == GameState.PREGAME || a.getState() == GameState.POSTGAME) {
+                            System.out.println("damage5");
+                            event.setCancelled(true);
+                        } else {
+                            System.out.println("damage4");
+                            return;
+                        }
+                    }
+                }
             }
         }
 

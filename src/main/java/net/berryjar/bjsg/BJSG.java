@@ -46,6 +46,10 @@ public final class BJSG extends JavaPlugin {
     public HashMap<String, Location> arenaLobbies = new HashMap<String, Location>();
     public HashSet<SGPlayer> sgPlayers = new HashSet<SGPlayer>();
     public HashSet<UUID> looseWrapperPlayer = new HashSet<UUID>();
+    public HashMap<UUID, Location> playerJoinSGEndTeleport = new HashMap<UUID, Location>();
+
+    public ArrayList<Arena> arenaCache = new ArrayList<Arena>();
+
 
 
     public void grantMagicWand(UUID u) {
@@ -102,6 +106,7 @@ public final class BJSG extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerWandInteract(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
         getServer().getPluginManager().registerEvents(new OpenChestListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerSignClick(), this);
 
 
         File config = new File(this.getDataFolder(), "config.yml");
@@ -124,7 +129,7 @@ public final class BJSG extends JavaPlugin {
 
 
 //        System.out.println("test" + spawns.toString());
-        regionManager.loadRegions();
+        regionManager.loadRegions(getConfig());
         arenaManager.loadArenaSpawns(getConfig());
         arenaManager.loadLobbySpawns(getConfig());
 

@@ -10,6 +10,7 @@ import net.berryjar.bjsg.util.Helper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -27,6 +28,7 @@ public class Arena {
     private GameState state;
     public ChestManager chestManager;
     public ArrayList<UUID> players;
+    public ArrayList<UUID> deadPlayers;
     public HashMap<UUID, Integer> intPlayers;
 //    public HashMap<Integer, UUID> playersLinkedID;
     public LinkedHashMap<Integer, Location> spawns;
@@ -37,14 +39,13 @@ public class Arena {
     private int lastSpawn;
     private final String arenaID;
     private final int requiredPlayers;
-    private int playerID;
+    public int playerID;
 
     public Arena(final BJSG plugin, Cuboid arenaRegion, String arenaID) {
         this.players = new ArrayList<UUID>();
         System.out.println("ARENA CONST " + players);
         this.intPlayers = new HashMap<UUID, Integer>();
         System.out.println("ARENA CONST " + intPlayers);
-        this.playerID = 1;
         System.out.println("ARENA CONST " + playerID);
         this.plugin = plugin;
         System.out.println("ARENA CONST " + plugin);
@@ -62,9 +63,17 @@ public class Arena {
         this.preDeathmatch = new PreDeathmatch(plugin, this);
         this.deathmatch = new Deathmatch(plugin, this);
         this.postGame = new PostGame(plugin, this);
-        this.spawns = new LinkedHashMap<Integer, Location>();
 
-//        if (this.spawns == null) {
+        this.deadPlayers = new ArrayList<UUID>();
+
+
+        if (plugin.arenaSpawns.containsKey(arenaID)) {
+            this.spawns = plugin.arenaSpawns.get(arenaID);
+        } else {
+            this.spawns = new LinkedHashMap<Integer, Location>();
+        }
+
+ //        if (this.spawns == null) {
 //            this.spawns = plugin.getArenaSpawnsMap(this.arenaID);
 //        }
 //        if (this.lobbyLocation == null) {
@@ -102,6 +111,13 @@ public class Arena {
 
 
     }
+//    public void stopArena(Arena arena) {
+//        plugin.arenaCache.add(arena);
+//
+//        arena.stopArena();
+//        arena.setState(GameState.STOPPED);
+//
+//    }
     public Lobby getLobby() {
         return lobby;
     }
@@ -142,6 +158,7 @@ public class Arena {
         return postGame;
     }
     public Cuboid getArenaRegion() { return arenaRegion; }
+    public final Set<Location> openedChests = new HashSet<Location>();
 
     public void setState(GameState state) {
         this.state = state;
@@ -151,6 +168,13 @@ public class Arena {
     }
     public String getId() {
         return arenaID;
+    }
+
+    public void playSound(Sound sound, int v, int v1) {
+        for (UUID player : players) {
+            Player p = Bukkit.getPlayer(player);
+            p.playSound(p, sound, v, v1);
+        }
     }
     public void broadcast(String message) {
 
@@ -185,8 +209,13 @@ public class Arena {
     }
 
     public void addPlayer(UUID uuid) {
-
         int i = playerID++;
+        System.out.println("player joined arena " + arenaID);
+        System.out.println(getSpawns());
+        System.out.println(Bukkit.getPlayer(uuid) + String.valueOf(playerID));
+
+
+
 //        System.out.println("SANSAN");
 //        System.out.println(players);
         players.add(uuid);
@@ -206,6 +235,14 @@ public class Arena {
     }
     public void removePlayer(UUID player) {
         players.remove(player);
+        Player p = Bukkit.getPlayer(player);
+        Location loc = plugin.playerJoinSGEndTeleport.get(player);
+        p.teleport(loc);
+        plugin.playerJoinSGEndTeleport.remove(player);
+        broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + Bukkit.getPlayer(player).getName() + " has left the game.");
+        for (Arena a : plugin.activeArenas) {
+            a.deadPlayers.remove(p.getUniqueId());
+        }
         // Remove the kit data for the UUID from the arena.
 
 
@@ -258,25 +295,44 @@ public class Arena {
         lobbyLocation.add(loc);
     }
     public void stopArena() {
+        System.out.println("stop 1");
 
         for (UUID player : getPlayers()) {
+            System.out.println("stop 2");
             broadcast(ChatHandler.chatPrefix + ChatColor.DARK_RED + "The game has been stopped by an administrator.");
             removePlayer(player);
         }
         if (getState() == GameState.LOBBY) {
+            System.out.println("stop 3");
             getLobby().cancel();
+            System.out.println("stop 4");
         } else if (getState() == GameState.PREGAME) {
+            System.out.println("stop 5");
             getPreGame().cancel();
+            System.out.println("stop 6");
         } else if (getState() == GameState.INGAME) {
+            System.out.println("stop 7");
             getInGame().cancel();
+            System.out.println("stop 8");
         } else if (getState() == GameState.PREDEATHMATCH) {
+            System.out.println("stop 9");
             getPreDeathmatch().cancel();
+            System.out.println("stop 10");
         } else if (getState() == GameState.DEATHMATCH) {
+            System.out.println("stop 11");
             getDeathmatch().cancel();
+            System.out.println("stop 12");
         } else if (getState() == GameState.POSTGAME) {
+            System.out.println("stop 13");
             getPostGame().cancel();
+            System.out.println("stop 14");
         }
         setState(GameState.STOPPED);
+        System.out.println("stop 15");
+        plugin.arenaCache.add(this);
+        System.out.println("stop 16");
+
+
     }
 
 //    public void setLobbyNull() {

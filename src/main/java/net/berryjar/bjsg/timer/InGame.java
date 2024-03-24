@@ -7,6 +7,7 @@ import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -34,6 +35,12 @@ public class InGame extends BukkitRunnable {
 
     @Override
     public void run() {
+        arena.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1, 5);
+
+        if (arena.getPlayers().isEmpty()) {
+            cancel();
+            arena.getPostGame().startPostGame(15);
+        }
 
         System.out.println("ingame time 0 AND getlplayers size greater than 1 cancel return start postgame 15");
         if (time == 0 && arena.getPlayers().size() > 1) {

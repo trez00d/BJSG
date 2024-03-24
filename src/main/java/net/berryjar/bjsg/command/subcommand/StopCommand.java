@@ -10,6 +10,9 @@ import net.berryjar.bjsg.util.Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Iterator;
+import java.util.Map;
+
 public class StopCommand extends SubCommand {
 
     private final BJSG plugin;
@@ -17,6 +20,7 @@ public class StopCommand extends SubCommand {
     public StopCommand(final BJSG plugin) {
         this.plugin = plugin;
     }
+
     @Override
     public String getName() {
         return "stop";
@@ -56,26 +60,23 @@ public class StopCommand extends SubCommand {
             if (args[0].equalsIgnoreCase("stop")) {
                 String arenaID = args[1];
                 ArenaManager arenaManager = new ArenaManager(plugin);
-                for (Arena a : plugin.activeArenas) {
-                    if (arenaManager.getArenaID(a).equalsIgnoreCase(arenaID)) {
-                        if (a.getId().equalsIgnoreCase(arenaID)) {
-                            if (a.getState() == GameState.STOPPED) {
-                                player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "This arena is already stopped.");
-                            } else {
-                                if (!(a.getState() == GameState.STOPPED)) {
-                                    a.stopArena();
-                                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "Arena " + arenaID + " stopped.");
-                                }
+                Arena toDelete = arenaManager.getArenaByID(arenaID);
+                toDelete.stopArena();
+                System.out.println("Arena stop add to cache" + arenaManager.getArenaByID(arenaID));
+                plugin.activeArenas.remove(toDelete);
+                player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "You stopped the arena." );
 
-                            }
+//                Arena toDelete = arenaManager.getArenaByID(arenaID);
+//                if (!(toDelete == null)) {
+//                    toDelete.stopArena();
+//                    plugin.activeArenas.remove(arenaManager.getArenaByID(arenaID));
+//                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "You stopped arena " + toDelete);
+//
+//                } else {
+//                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena not found.");
+//                }
 
-                        } else {
-                            player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
-                        }
-                    } else {
-                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
-                    }
-                }
+            }
 //                    player.sendMessage("3");
 //                    if (a.getId().equalsIgnoreCase(arenaID)) {
 //                        player.sendMessage("4");
@@ -89,9 +90,8 @@ public class StopCommand extends SubCommand {
 //                        player.sendMessage("8");
 //                    }
 //                }
-            }
-
         }
 
     }
+
 }

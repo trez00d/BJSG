@@ -63,6 +63,15 @@ public class GetStateCommand extends SubCommand {
                         }
                     }
                 }
+                for (Arena a : plugin.arenaCache) {
+                    if (arenaManager.getArenaID(a).equalsIgnoreCase(arenaID)) {
+                        if (a.getId().equalsIgnoreCase(arenaID)) {
+                            player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + a.getState());
+                        } else {
+                            player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
+                        }
+                    }
+                }
 //                    player.sendMessage("3");
 //                    if (a.getId().equalsIgnoreCase(arenaID)) {
 //                        player.sendMessage("4");

@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
+import java.util.UUID;
+
 public class PreventionListener implements Listener {
 
     private final BJSG plugin;
@@ -33,7 +35,6 @@ public class PreventionListener implements Listener {
                     event.setCancelled(true);
                     player.teleport(action);
                 }
-
             }
         }
     }
@@ -41,17 +42,35 @@ public class PreventionListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            event.setCancelled(true);
+
+        for (Arena a : plugin.activeArenas) {
+            if (!(a.getState() == GameState.STOPPED)) {
+                event.setCancelled(true);
+            } else {
+                event.setCancelled(false);
+            }
         }
+        return;
+
+//        if (player.getGameMode() != GameMode.CREATIVE) {
+//            event.setCancelled(true);
+//        }
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            event.setCancelled(true);
+
+        for (Arena a : plugin.activeArenas) {
+            if (!(a.getState() == GameState.STOPPED)) {
+                event.setCancelled(true);
+            } else {
+                event.setCancelled(false);
+            }
         }
+//        if (player.getGameMode() != GameMode.CREATIVE) {
+//            event.setCancelled(true);
+//        }
     }
 
 //    @EventHandler

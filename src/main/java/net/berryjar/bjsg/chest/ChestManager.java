@@ -1,5 +1,7 @@
 package net.berryjar.bjsg.chest;
 
+import net.berryjar.bjsg.BJSG;
+import net.berryjar.bjsg.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,10 +17,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ChestManager {
 
-    private final Set<Location> openedChests = new HashSet<Location>();
+
+
     private final List<LootItem> lootItems = new ArrayList<LootItem>();
 
     public ChestManager(FileConfiguration lootConfig) {
+
         ConfigurationSection itemsSection = lootConfig.getConfigurationSection("lootItems");
 
         if (itemsSection == null) {
@@ -31,16 +35,16 @@ public class ChestManager {
         }
     }
 
-    public void markAsOpened(Location location) {
-        openedChests.add(location);
+    public void markAsOpened(Arena arena, Location location) {
+        arena.openedChests.add(location);
     }
 
-    public boolean hasBeenOpened(Location location) {
-        return openedChests.contains(location);
+    public boolean hasBeenOpened(Arena arena, Location location) {
+        return arena.openedChests.contains(location);
     }
 
-    public void resetChests() {
-        openedChests.clear();
+    public void resetChests(Arena arena) {
+        arena.openedChests.clear();
     }
 
     public void fill(Inventory inventory) {

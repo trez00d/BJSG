@@ -8,6 +8,7 @@ import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.util.Helper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -33,11 +34,11 @@ public class Deathmatch extends BukkitRunnable {
         this.runTaskTimer(plugin, 0L, 20L);
 
         for (UUID player : arena.getPlayers()) {
+            Player p = Bukkit.getPlayer(player);
             int playerNum = arena.intPlayers.get(player);
-            for (Arena a : plugin.activeArenas) {
-                if (a.getSpawns().containsKey(playerNum)) {
-                    Bukkit.getPlayer(player).teleport(a.getSpawn(playerNum));
-                }
+            if (arena.getSpawns().containsKey(playerNum)) {
+                Location spawnLoc = arena.getSpawn(playerNum);
+                p.teleport(spawnLoc);
 //            for (int i = 0; i < arena.getSpawns().size(); i++) {
 //                Location loc = arena.getSpawn(i);
 //                System.out.println(loc);
@@ -84,6 +85,7 @@ public class Deathmatch extends BukkitRunnable {
             }
         }
     }
+
     @Override
     public void run() {
 

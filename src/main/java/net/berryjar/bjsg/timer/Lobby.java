@@ -27,11 +27,16 @@ public class Lobby extends BukkitRunnable{
     }
 
     public void startLobby(int time) {
-        System.out.println("lobby test");
+//        System.out.println("lobby test");
         arena.setState(GameState.LOBBY);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
-        plugin.activeArenas.add(arena);
+        if (plugin.activeArenas.contains(arena)) {
+            return;
+        } else {
+            plugin.activeArenas.add(arena);
+        }
+
 
     }
 

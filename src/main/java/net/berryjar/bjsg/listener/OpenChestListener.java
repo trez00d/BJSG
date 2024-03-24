@@ -6,6 +6,7 @@ import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chest.ChestManager;
 import net.berryjar.bjsg.player.SGPlayer;
 import org.bukkit.block.Chest;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,18 +23,23 @@ public class OpenChestListener implements Listener {
     @EventHandler()
     public void onPlayerChestOpen(InventoryOpenEvent event) {
         System.out.println("LISTENER TEST");
-
+        ChestManager chestManager = new ChestManager(plugin.getConfig());
         InventoryHolder holder = event.getInventory().getHolder();
-
+        Chest chest = (Chest) holder;
         for (Arena a : plugin.activeArenas) {
             if (a.getState() == GameState.INGAME || a.getState() == GameState.PREDEATHMATCH || a.getState() == GameState.DEATHMATCH) {
-                if (holder instanceof Chest) {
-                    Chest chest = (Chest) holder;
-                    ChestManager chestManager = new ChestManager(plugin.getConfig());
-                    if (chestManager.hasBeenOpened(chest.getLocation())) return;
-                    chestManager.markAsOpened(chest.getLocation());
-                    chestManager.fill(chest.getBlockInventory());
+                Player player = (Player) event.getPlayer();
+                if (a.getPlayers().contains(player.getUniqueId())) {
+                    if (holder instanceof Chest) {
+                        if (chestManager.hasBeenOpened(a, chest.getLocation())) {
+                            return;
+                        }
+                        chestManager.markAsOpened(a, chest.getLocation());
+                        System.out.println("has been opened " + a.openedChests);
+                        chestManager.fill(chest.getBlockInventory());
+                    }
                 }
+
             }
         }
 

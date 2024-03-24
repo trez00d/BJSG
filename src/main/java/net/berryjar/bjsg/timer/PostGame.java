@@ -5,8 +5,10 @@ import net.berryjar.bjsg.arena.Arena;
 import net.berryjar.bjsg.arena.GameState;
 import net.berryjar.bjsg.chat.ChatHandler;
 import net.berryjar.bjsg.player.SGPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.units.qual.A;
 
@@ -41,6 +43,8 @@ public class PostGame extends BukkitRunnable {
             cancel();
             for (UUID player : arena.getPlayers()) {
                 arena.removePlayer(player);
+                Player p = Bukkit.getPlayer(player);
+                p.teleport(plugin.playerJoinSGEndTeleport.get(player));
             }
             arena.players.clear();
             plugin.activeArenas.remove(arena);
@@ -55,7 +59,14 @@ public class PostGame extends BukkitRunnable {
         }
         if (time == 0 && arena.getPlayers().size() > 1) {
             cancel();
+            for (UUID player : arena.getPlayers()) {
+                arena.removePlayer(player);
+                Player p = Bukkit.getPlayer(player);
+                p.teleport(plugin.playerJoinSGEndTeleport.get(player));
+            }
+            arena.players.clear();
             plugin.activeArenas.remove(arena);
+
             Location lobLoc = arena.getLobbyLocation();
             Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
             arenaNew.setLobby(lobLoc);
@@ -69,6 +80,12 @@ public class PostGame extends BukkitRunnable {
         }
         if (arena.getPlayers().size() == 1) {
             cancel();
+            for (UUID player : arena.getPlayers()) {
+                arena.removePlayer(player);
+                Player p = Bukkit.getPlayer(player);
+                p.teleport(plugin.playerJoinSGEndTeleport.get(player));
+            }
+            arena.players.clear();
             plugin.activeArenas.remove(arena);
             Location lobLoc = arena.getLobbyLocation();
             Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());

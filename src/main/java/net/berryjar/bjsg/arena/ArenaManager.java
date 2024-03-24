@@ -18,12 +18,31 @@ public class ArenaManager {
     private ArenaManager arenaManager;
     private final BJSG plugin;
 
+
     public ArenaManager(final BJSG plugin) {
         this.plugin = plugin;
     }
 
     public String getArenaID(Arena arena) {
+
         return arena.getId();
+    }
+
+    public Arena getArenaByID(String arenaID) {
+        for (Arena a : plugin.activeArenas) {
+            if (a.getId().equals(arenaID)) {
+                return a;
+            }
+        }
+        return null;
+    }
+    public Arena getStoppedArenaByID(String arenaID) {
+        for (Arena a : plugin.arenaCache) {
+            if (a.getId().equalsIgnoreCase(arenaID)) {
+                return a;
+            }
+        }
+        return null;
     }
 
     public int spawnNum;
@@ -49,95 +68,116 @@ public class ArenaManager {
 //        }
 //    }
 
+    public void removeArena(Arena arena) {
+
+    }
+
     public void loadArenaSpawns(FileConfiguration file) {
         ConfigurationSection spawnsSec = file.getConfigurationSection("spawns");
-        System.out.println(spawnsSec.getKeys(false));
-        for (String arenaID : spawnsSec.getKeys(false)) {
-            ConfigurationSection arenas = spawnsSec.getConfigurationSection(arenaID);
-            for (String spawnID : arenas.getKeys(false)) {
-                ConfigurationSection spawnIDs = arenas.getConfigurationSection(spawnID);
-                System.out.println("spawnID " + spawnID);
-                String stringWorld = (spawnIDs.getString("world"));
-                World world = Bukkit.getWorld(stringWorld);
-                int x = spawnIDs.getInt("x");
-                int y = spawnIDs.getInt("y");
-                int z = spawnIDs.getInt("z");
-                float pitch = (float) spawnIDs.getDouble("pitch");
-                float yaw = (float) spawnIDs.getDouble("yaw");
-                Location loc = new Location(world, x, y, z, yaw, pitch);
-                for (Arena a : plugin.activeArenas) {
-                    a.addSpawns(Integer.valueOf(spawnID), loc);
-                    System.out.println(loc);
-                }
-                System.out.println("arenas " + arenas);
+//        System.out.println("spawn load " + spawnsSec.getKeys(false));
 
-//            Location spawnLoc = new Location(world, x, y, z, yaw, pitch);
-//            System.out.println(spawnLoc);
-//            for (String spawnID : arenas.getKeys(true)) {
-//                ConfigurationSection spawnsID = arenas.getConfigurationSection(spawnID);
-//                System.out.println(spawnsID);
-////                for (String atts : spawnsID.getKeys(false)) {
-////                    World world = Bukkit.getWorld(spawnsID.getString("world"));
-////                    int x = spawnsID.getInt("x");
-////                    int y = spawnsID.getInt("y");
-////                    int z = spawnsID.getInt("z");
-////                    float pitch = (float) spawnsID.getDouble("pitch");
-////                    float yaw = (float) spawnsID.getDouble("yaw");
-////
-////                    Location spawnLoc = new Location(world, x, y, z, yaw, pitch);
-////                    for (Arena a : plugin.activeArenas) {
-////                        a.addSpawns(Integer.valueOf(spawnID), spawnLoc);
-////                        System.out.println(a.getSpawns());
-////                        LinkedHashMap<Integer, Location> spawnsMap = a.getSpawns();
-////                        System.out.println(spawnsMap);
-//////                    for (Integer.valueOf(spawnID) : a.spawns.keySet()) {
-//////
-//////                        System.out.println(id);
-//////                    }
-//////                    System.out.println("Sanity A" + a.getId());
-//////                    System.out.println("Sanity B " + spawnID);
-//////                    if (a.getId().equals(arenaID)) {
-//////                        a.spawns.put(Integer.valueOf(spawnID), spawnLoc);
-//////                        System.out.println("Sanity" + a.getSpawns());
-////////                        return;
-//////                    }
-//////                        a.spawns.put(Integer.valueOf(spawnID), spawnLoc)
-////                    }
-////
-////
-////                }
-////                World world = builder.getWorldWorld();
-////                int x = builder.getX();
-////                int y = builder.getY();
-////                int z = builder.getZ();
-////                float pitch = (float) builder.getPitch();
-////                float yaw = (float) builder.getYaw();
-////
-////                System.out.println(world + " " + x + " " + y + " " + z + " " + yaw + " " + pitch);
-//
-//            }
+
+        for (String key : spawnsSec.getKeys(false)) {
+            String arenaID = null;
+            String stringWorld = null;
+            int spawnID = 0;
+            int x = 0;
+            int y = 0;
+            int z = 0;
+            float pitch = 0;
+            float yaw = 0;
+            Location spawnLoc = null;
+            arenaID = key;
+            ConfigurationSection arenaNameSection = spawnsSec.getConfigurationSection(key);
+            for (String keys1 : arenaNameSection.getKeys(false)) {
+                spawnID = Integer.parseInt(keys1);
+                ConfigurationSection spawnIDs = arenaNameSection.getConfigurationSection(keys1);
+                for (String keys2 : spawnIDs.getKeys(false)) {
+                    ConfigurationSection atts = spawnIDs.getConfigurationSection(keys2);
+                    stringWorld = spawnIDs.getString("world");
+                    x = spawnIDs.getInt("x");
+                    y = spawnIDs.getInt("y");
+                    z = spawnIDs.getInt("z");
+                    x = spawnIDs.getInt("x");
+                    pitch = (float) spawnIDs.getDouble("pitch");
+                    yaw = (float) spawnIDs.getDouble("yaw");
+
+
+                }
+                World world = Bukkit.getWorld(stringWorld);
+                spawnLoc = new Location(world, x, y, z, yaw, pitch);
+                for (Arena a : plugin.activeArenas) {
+                    if (a.getId().equals(arenaID)) {
+                        System.out.println(spawnLoc);
+                        System.out.println("arena spawn " + a.getId());
+                        System.out.println("arena spawn " + arenaID);
+                        a.addSpawn(spawnID, spawnLoc);
+                        plugin.arenaSpawns.put(arenaID, a.getSpawns());
+                        System.out.println(String.valueOf(spawnID) + spawnLoc);
+//                        System.out.println(a.getSpawns());
+                    }
+                }
+
+
+
+//                System.out.println("resulting location from load of arena " + key + ": " + spawnLoc.getWorld() + ", " + spawnID + ", " + spawnLoc);
+
+            }
+
+
+            for (Arena a : plugin.activeArenas) {
+                System.out.println(a.getId() + a.getSpawns());
             }
 
 
 
         }
+
+
+
     }
 
     public void loadLobbySpawns(FileConfiguration file) {
         ConfigurationSection lobbySec = file.getConfigurationSection("lobby");
-        for (String arenaID : lobbySec.getKeys(false)) {
-            ConfigurationSection arenas = lobbySec.getConfigurationSection(arenaID);
-            World world = Bukkit.getWorld(arenas.getString("world"));
-            int x = arenas.getInt("x");
-            int y = arenas.getInt("y");
-            int z = arenas.getInt("z");
-            float pitch = (float) arenas.getDouble("pitch");
-            float yaw = (float) arenas.getDouble("yaw");
-            Location lobbyLoc = new Location(world, x, y, z, yaw, pitch);
-//            System.out.println(lobbyLoc);
+
+
+
+        for (String key : lobbySec.getKeys(false)) {
+            String arenaID = key;
+            World world = null;
+            int x = 0;
+            int y = 0;
+            int z = 0;
+            float pitch = 0;
+            float yaw = 0;
+            Location lobbyLoc = null;
+            ConfigurationSection arenaNameSection = lobbySec.getConfigurationSection(key);
+            for (String key1 : arenaNameSection.getKeys(false)) {
+
+                world = Bukkit.getWorld(arenaNameSection.getString("world"));
+                x = arenaNameSection.getInt("x");
+                y = arenaNameSection.getInt("y");
+                z = arenaNameSection.getInt("z");
+                pitch = (float) arenaNameSection.getDouble("pitch");
+                yaw = (float) arenaNameSection.getDouble("yaw");
+
+//                ConfigurationSection atts = arenaNameSection.getConfigurationSection(key1);
+//                world = Bukkit.getWorld(atts.getString("world"));
+//                x = atts.getInt("x");
+//                y = atts.getInt("y");
+//                z = atts.getInt("z");
+//                pitch = (float) atts.getDouble("pitch");
+//                yaw = (float) atts.getDouble("yaw");
+
+            }
+            lobbyLoc = new Location(world, x, y, z, yaw, pitch);
+//            System.out.println("lobby load " + arenaID + " " + lobbyLoc);
             for (Arena a : plugin.activeArenas) {
-                a.setLobby(lobbyLoc);
-                plugin.arenaLobbies.put(arenaID, lobbyLoc);
+                if (a.getId().equals(arenaID)) {
+                    a.setLobby(lobbyLoc);
+                    plugin.arenaLobbies.put(arenaID, lobbyLoc);
+                }
+
 //                System.out.println("arenamanager print arenalobbies after putting in");
 //                System.out.println(plugin.arenaLobbies);
 
@@ -150,6 +190,9 @@ public class ArenaManager {
 //
 
             }
+
+//            System.out.println(lobbyLoc);
+
 //            for (String spawnID : arenas.getKeys(false)) {
 //                ConfigurationSection spawnsID = arenas.getConfigurationSection(spawnID);
 //                World world = Bukkit.getWorld(spawnsID.getString("world"));
@@ -168,6 +211,7 @@ public class ArenaManager {
 //                }
 //            }
         }
+
     }
 
 //    public void loadArenaSpawns() {

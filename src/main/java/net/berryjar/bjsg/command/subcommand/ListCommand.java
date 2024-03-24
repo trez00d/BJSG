@@ -36,10 +36,21 @@ public class ListCommand extends SubCommand {
         if (args.length == 2) {
             if(args[0].equalsIgnoreCase("arena")) {
                 if (args[1].equalsIgnoreCase("list")) {
+                    StringBuilder sBActive = new StringBuilder(ChatHandler.chatPrefix + ChatColor.GREEN + "Active arenas: " );
+                    StringBuilder sBStopped = new StringBuilder(ChatHandler.chatPrefix + ChatColor.GRAY + "Stopped arenas: ");
+
                     for (Arena a : plugin.activeArenas) {
-                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + a);
-                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + a.getId());
+                        player.sendMessage(a.getId());
+                        sBActive.append(a.getId()).append(", ");
+
                     }
+                    for (Arena a : plugin.arenaCache) {
+                        sBStopped.append(a.getId()).append(", ");
+
+                    }
+                    player.sendMessage(String.valueOf(sBActive));
+                    player.sendMessage(String.valueOf(sBStopped));
+
                 }
             }
         }

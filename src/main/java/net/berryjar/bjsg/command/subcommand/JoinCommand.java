@@ -9,6 +9,7 @@ import net.berryjar.bjsg.util.Manager;
 import net.berryjar.bjsg.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class JoinCommand extends SubCommand {
@@ -56,21 +57,22 @@ public class JoinCommand extends SubCommand {
         }
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("join")) {
-                System.out.println("JoinCommand 59");
                 String arenaID = args[1];
+
                 ArenaManager arenaManager = new ArenaManager(plugin);
+
                 for (Arena a : plugin.activeArenas) {
-                    System.out.println("JoinCommand 63");
                     if (plugin.activeArenas.contains(a)) {
-                        System.out.println("JoinCommand 65");
-                        if (a.getId().equalsIgnoreCase(arenaID)) {
-                            System.out.println("JoinCommand 67");
+                        if (arenaID.equals(a.getId())) {
+                            System.out.println("arena join entered" + arenaID);
+                            System.out.println("arena join returned from manager" + a.getId());
                             if (a.getState() == GameState.LOBBY) {
-                                System.out.println("JoinCommand 69");
+                                Location loc = player.getLocation();
+                                plugin.playerJoinSGEndTeleport.put(player.getUniqueId(), loc);
                                 a.addPlayer(player.getUniqueId());
                                 player.teleport(a.getLobbyLocation());
                                 player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You joined arena " + arenaID + ".");
-                            } else {
+                            } else if (a.getState() != GameState.LOBBY){
                                 player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "This game has already started.");
                             }
 

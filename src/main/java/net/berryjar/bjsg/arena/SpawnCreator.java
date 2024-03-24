@@ -34,9 +34,9 @@ public class SpawnCreator {
 //                System.out.println("TEST " + spawnID);
                 String world = loc.getWorld().getName();
 //                System.out.println("TEST " + spawnID);
-                int x = loc.getBlockX();
-                int y = loc.getBlockY();
-                int z = loc.getBlockZ();
+                double x = loc.getX();
+                double y = loc.getY();
+                double z = loc.getZ();
                 float pitch = loc.getPitch();
                 float yaw = loc.getYaw();
                 LinkedHashMap<Integer, Location> arenaSpawn = a.getSpawns();

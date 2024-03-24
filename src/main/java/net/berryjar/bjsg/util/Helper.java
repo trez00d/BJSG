@@ -1,12 +1,19 @@
 package net.berryjar.bjsg.util;
 
+import net.berryjar.bjsg.BJSG;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
 public class Helper {
 
-    public static void teleportToSpawn(Player player) {
-        player.teleport(Manager.SPAWN_POINT);
+    private final BJSG plugin;
+
+    public Helper(final BJSG plugin) {
+        this.plugin = plugin;
+    }
+
+    public void teleportToSpawn(Player player) {
+        player.teleport(plugin.playerJoinSGEndTeleport.get(player.getUniqueId()));
     }
 
     public static void clearInventoryAndEffects(Player player) {

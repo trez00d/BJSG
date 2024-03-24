@@ -27,6 +27,8 @@ public class CommandManager implements CommandExecutor {
         subCommandList.add(new ListCommand(plugin));
         subCommandList.add(new StopCommand(plugin));
         subCommandList.add(new StartCommand(plugin));
+        subCommandList.add(new LeaveCommand(plugin));
+        subCommandList.add(new GetSpawnCommand(plugin));
 
 
     }
