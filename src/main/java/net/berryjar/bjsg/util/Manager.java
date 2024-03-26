@@ -54,16 +54,16 @@ public class Manager {
     }
 
     public void addArena(Arena arena) {
-        plugin.activeArenas.add(arena);
+        plugin.getActiveArenas().add(arena);
     }
 
     public void removeArena(Arena arena) {
-        plugin.activeArenas.remove(arena);
+        plugin.getActiveArenas().remove(arena);
     }
 
     public Arena getArena(String id) {
-        for (int i = 0; i < plugin.activeArenas.size(); i++) {
-            final Arena arena = plugin.activeArenas.get(i);
+        for (int i = 0; i < plugin.getActiveArenas().size(); i++) {
+            final Arena arena = plugin.getActiveArenas().get(i);
 
             if (arena.getId().equals(id)) {
                 return arena;
@@ -77,8 +77,8 @@ public class Manager {
     }
 
     public Arena getArena(UUID player) {
-        for (int i = 0; i < plugin.activeArenas.size(); i++) {
-            final Arena arena = plugin.activeArenas.get(i);
+        for (int i = 0; i < plugin.getActiveArenas().size(); i++) {
+            final Arena arena = plugin.getActiveArenas().get(i);
 
             if (arena.contains(player)) {
                 return arena;

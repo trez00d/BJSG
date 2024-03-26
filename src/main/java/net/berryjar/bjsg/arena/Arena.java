@@ -7,10 +7,7 @@ import net.berryjar.bjsg.cuboid.Cuboid;
 import net.berryjar.bjsg.player.SGPlayer;
 import net.berryjar.bjsg.timer.*;
 import net.berryjar.bjsg.util.Helper;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -170,6 +167,10 @@ public class Arena {
         return arenaID;
     }
 
+    public World getWorld() {
+        return getArenaRegion().getWorld();
+    }
+
     public void playSound(Sound sound, int v, int v1) {
         for (UUID player : players) {
             Player p = Bukkit.getPlayer(player);
@@ -208,6 +209,17 @@ public class Arena {
         this.state = GameState.LOBBY;
     }
 
+    public void addDeadPlayer(UUID uuid) {
+        deadPlayers.add(uuid);
+    }
+    public void removeDeadPlayer(UUID uuid) {
+        deadPlayers.remove(uuid);
+    }
+
+    public ArrayList<UUID> getDeadPlayers() {
+        return deadPlayers;
+    }
+
     public void addPlayer(UUID uuid) {
         int i = playerID++;
         System.out.println("player joined arena " + arenaID);
@@ -225,44 +237,44 @@ public class Arena {
 //        System.out.println("add player test");
 //        System.out.println(lobby.isRunning());
 //        System.out.println(players.size());
-        if (!lobby.isRunning() && players.size() >= requiredPlayers) {
-
-//            System.out.println("add player test");
-            lobby.startLobby(30);
-        }
+//        if (!lobby.isRunning() && players.size() >= requiredPlayers) {
+//
+////            System.out.println("add player test");
+//            lobby.startLobby(30);
+//        }
         Helper.clearInventoryAndEffects(Bukkit.getPlayer(uuid));
 
     }
     public void removePlayer(UUID player) {
-        players.remove(player);
+
         Player p = Bukkit.getPlayer(player);
-        Location loc = plugin.playerJoinSGEndTeleport.get(player);
+        Location loc = plugin.getPlayerJoinSGEndTeleport(player);
+        p.sendMessage(loc.toString());
         p.teleport(loc);
-        plugin.playerJoinSGEndTeleport.remove(player);
+        plugin.delPlayerJoinSGEndTeleport(player);
         broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + Bukkit.getPlayer(player).getName() + " has left the game.");
-        for (Arena a : plugin.activeArenas) {
-            a.deadPlayers.remove(p.getUniqueId());
-        }
+        deadPlayers.remove(player);
+        players.remove(player);
         // Remove the kit data for the UUID from the arena.
 
 
 
         // Win detection. Check if the game has actually started first, though,
         // because if we don't do this, errors could occur.
-        if (state == GameState.INGAME && players.size() == 1) {
-            inGame.cancel();
-
-            // Get the last player.
-            Player winner = Bukkit.getPlayer(players.get(0));
-            broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
-//            Bukkit.broadcastMessage(
-//                    ChatColor.GREEN + "" + ChatColor.BOLD + winner.getName() + " won arena " + arenaID + "!");
-
-            removePlayer(players.get(0));
-
-            // Reset the arena.
-            reset();
-        }
+//        if (players.size() == 1) {
+//            inGame.cancel();
+//
+//            // Get the last player.
+//            Player winner = Bukkit.getPlayer(players.get(0));
+//            broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
+////            Bukkit.broadcastMessage(
+////                    ChatColor.GREEN + "" + ChatColor.BOLD + winner.getName() + " won arena " + arenaID + "!");
+//
+//            removePlayer(players.get(0));
+//
+//            // Reset the arena.
+//            reset();
+//        }
     }
 
     public LinkedHashMap<Integer, Location> getSpawns() {
@@ -331,6 +343,12 @@ public class Arena {
         System.out.println("stop 15");
         plugin.arenaCache.add(this);
         System.out.println("stop 16");
+
+
+    }
+
+    public void checkTimeOutLogic() {
+
 
 
     }

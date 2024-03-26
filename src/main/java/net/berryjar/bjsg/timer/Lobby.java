@@ -31,10 +31,10 @@ public class Lobby extends BukkitRunnable{
         arena.setState(GameState.LOBBY);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
-        if (plugin.activeArenas.contains(arena)) {
+        if (plugin.getActiveArenas().contains(arena)) {
             return;
         } else {
-            plugin.activeArenas.add(arena);
+            plugin.getActiveArenas().add(arena);
         }
 
 
@@ -43,11 +43,15 @@ public class Lobby extends BukkitRunnable{
     @Override
     public void run() {
 
+        arena.broadcast(arena.getPlayers().toString());
+
+
+
+
         if (this.time == 0) {
             cancel();
             if (!arena.getPreGame().isRunning()) {
                 arena.getPreGame().startPreGame(15);
-                System.out.println("lobby time 0 cancel return start pregame 15");
                 return;
             }
 
@@ -55,7 +59,7 @@ public class Lobby extends BukkitRunnable{
 //            arena.setLobbyRunnable();
             return; // Get out of the run method.
         }
-
+//
         if (time % 15 == 0 || time <= 10) {
             // If the time is divisible by 15 then broadcast a countdown
             // message.
@@ -65,22 +69,25 @@ public class Lobby extends BukkitRunnable{
                 arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + "Game will start in " + time + " second.");
             }
         }
-
+//
+//
         if (arena.getPlayers().size() < arena.getRequiredPlayers()) {
             arena.setState(GameState.LOBBY);
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.RED + "There are too few players. Countdown stopped.");
             return;
         }
-        if (arena.getPlayers().size() >= arena.getRequiredPlayers()) {
-            cancel();
-            if (!arena.getPreGame().isRunning()) {
-                arena.getPreGame().startPreGame(15);
-                return;
-            }
-//            arena.setLobbyNull();
-//            arena.setLobbyRunnable();
-            return;
-        }
+//
+//        if (arena.getPlayers().size() >= arena.getRequiredPlayers()) {
+//            System.out.println(arena.getId() + "lobby playersize >= requiredsize");
+//            cancel();
+//            if (!arena.getPreGame().isRunning()) {
+//                arena.getPreGame().startPreGame(15);
+//                return;
+//            }
+////            arena.setLobbyNull();
+////            arena.setLobbyRunnable();
+//            return;
+//        }
 
         time--;
     }

@@ -51,15 +51,16 @@ public class LeaveCommand extends SubCommand {
 //                System.out.println("JoinCommand 59");
                 String arenaID = args[1];
                 ArenaManager arenaManager = new ArenaManager(plugin);
-                for (Arena a : plugin.activeArenas) {
+                for (Arena a : plugin.getActiveArenas()) {
 //                    System.out.println("JoinCommand 63");
-                    if (plugin.activeArenas.contains(a)) {
+                    if (plugin.getActiveArenas().contains(a)) {
 //                        System.out.println("JoinCommand 65");
                         if (a.getId().equalsIgnoreCase(arenaID)) {
 //                            System.out.println("JoinCommand 67");
                             if (a.getPlayers().contains(player.getUniqueId())) {
 //                                System.out.println("JoinCommand 69");
                                 a.removePlayer(player.getUniqueId());
+                                plugin.sgPlayers.remove(player.getUniqueId());
                                 player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You left arena " + arenaID + ".");
                             } else {
                                 player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "You are not in an arena.");

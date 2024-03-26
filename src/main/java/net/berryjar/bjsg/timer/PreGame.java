@@ -30,6 +30,7 @@ public class PreGame extends BukkitRunnable {
 
     public void startPreGame(int time) {
 
+
         arena.setState(GameState.PREGAME);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
@@ -37,21 +38,13 @@ public class PreGame extends BukkitRunnable {
 
         for (UUID player : arena.getPlayers()) {
             Player p = Bukkit.getPlayer(player);
-            System.out.println("pregame 1");
             int playerNum = arena.intPlayers.get(player);
-            System.out.println(player + String.valueOf(playerNum));
-            for (Arena a : plugin.activeArenas) {
-                System.out.println("pregame 2");
+            for (Arena a : plugin.getActiveArenas()) {
                 if (arena.getId().equals(a.getId())) {
                     plugin.arenaSpawns.put(a.getId(), a.getSpawns());
-                    System.out.println("pregame 3");
                     if (a.getSpawns().containsKey(playerNum)) {
-                        System.out.println("pregame 4");
                         Helper.clearInventoryAndEffects(Bukkit.getPlayer(player));
                         Helper.clearPotionEffects(Bukkit.getPlayer(player));
-                        System.out.println(playerNum);
-                        System.out.println(a.getSpawns());
-                        System.out.println(a.getSpawn(playerNum));
                         Location spawnLoc = a.getSpawn(playerNum);
                         p.teleport(spawnLoc);
 //                        Bukkit.getPlayer(player).teleport(a.getSpawn(playerNum));
@@ -106,14 +99,12 @@ public class PreGame extends BukkitRunnable {
     }
     @Override
     public void run() {
-        if (arena.getPlayers().isEmpty()) {
-            cancel();
-            arena.getPostGame().startPostGame(15);
-        }
+        arena.broadcast("in pregame");
+        arena.broadcast(arena.getPlayers().toString());
 
         if (time == 0) {
 
-            System.out.println("pregame time 0 cancel return start ingame 15");
+//            System.out.println("pregame time 0 cancel return start ingame 15");
             cancel();
             if (!arena.getInGame().isRunning()) {
                 arena.getInGame().startInGame(15);
@@ -122,6 +113,23 @@ public class PreGame extends BukkitRunnable {
 
             return; // Get out of the run method.
         }
+//        System.out.println(arena.getId() + "pregame playersize is empty");
+//        if (arena.getPlayers().isEmpty()) {
+//            cancel();
+//            arena.reset();
+//            arena.getPostGame().startPostGame(15);
+//        }
+
+//        System.out.println(arena.getId() + "pregame playersize is 1");
+        if (arena.getPlayers().size() == 1) {
+            cancel();
+            UUID sgWinner = arena.players.get(0);
+            Player winner = Bukkit.getPlayer(sgWinner);
+            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
+            arena.getPostGame().startPostGame(15);
+            return;
+        }
+
 
         if (time % 15 == 0 || time <= 10) {
             // If the time is divisible by 15 then broadcast a countdown

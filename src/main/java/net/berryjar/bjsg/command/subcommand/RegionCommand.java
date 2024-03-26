@@ -44,7 +44,7 @@ public class RegionCommand extends SubCommand {
 //            if (args[1].equalsIgnoreCase("edit")) {
 //                if (!(player.hasPermission("bjhub.edit"))) {
 //                    player.sendMessage(ChatHandler.chatPrefix + ChatHandler.noPerms);
-//                } else if (player.hasPermission("bjhub.edit")) {
+//                } else if (player.haasPermission("bjhub.edit")) {
 //                    MagicWand magicWand = new MagicWand();
 //                    ItemStack wandStack = magicWand.getMagicWand();
 //                    wandManager.setPrimed(player);

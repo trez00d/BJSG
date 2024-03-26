@@ -26,7 +26,7 @@ public class OpenChestListener implements Listener {
         ChestManager chestManager = new ChestManager(plugin.getConfig());
         InventoryHolder holder = event.getInventory().getHolder();
         Chest chest = (Chest) holder;
-        for (Arena a : plugin.activeArenas) {
+        for (Arena a : plugin.getActiveArenas()) {
             if (a.getState() == GameState.INGAME || a.getState() == GameState.PREDEATHMATCH || a.getState() == GameState.DEATHMATCH) {
                 Player player = (Player) event.getPlayer();
                 if (a.getPlayers().contains(player.getUniqueId())) {

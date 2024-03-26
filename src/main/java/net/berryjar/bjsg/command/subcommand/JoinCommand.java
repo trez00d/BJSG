@@ -61,17 +61,23 @@ public class JoinCommand extends SubCommand {
 
                 ArenaManager arenaManager = new ArenaManager(plugin);
 
-                for (Arena a : plugin.activeArenas) {
-                    if (plugin.activeArenas.contains(a)) {
+                for (Arena a : plugin.getActiveArenas()) {
+                    if (plugin.getActiveArenas().contains(a)) {
                         if (arenaID.equals(a.getId())) {
                             System.out.println("arena join entered" + arenaID);
                             System.out.println("arena join returned from manager" + a.getId());
                             if (a.getState() == GameState.LOBBY) {
-                                Location loc = player.getLocation();
-                                plugin.playerJoinSGEndTeleport.put(player.getUniqueId(), loc);
-                                a.addPlayer(player.getUniqueId());
-                                player.teleport(a.getLobbyLocation());
-                                player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You joined arena " + arenaID + ".");
+                                if (a.getPlayers().contains(player.getUniqueId())) {
+                                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "You have already joined a game.");
+                                } else {
+                                    Location loc = player.getLocation();
+                                    plugin.playerJoinSGEndTeleport.put(player.getUniqueId(), loc);
+                                    a.addPlayer(player.getUniqueId());
+                                    plugin.sgPlayers.add(player.getUniqueId());
+                                    player.teleport(a.getLobbyLocation());
+                                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You joined arena " + arenaID + ".");
+                                }
+
                             } else if (a.getState() != GameState.LOBBY){
                                 player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "This game has already started.");
                             }

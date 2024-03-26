@@ -32,53 +32,75 @@ public class PreDeathmatch extends BukkitRunnable {
 
     @Override
     public void run() {
-
-        System.out.println("predm time == 0 && players size greater than 1");
-        if (time == 0 && arena.getPlayers().size() > 1) {
-            cancel();
-
-//            for (SGPlayer player : arena.getPlayers()) {
-//                System.out.println("18");
-//                arena.removePlayer(player);
-//                System.out.println("19");
-//            }
-            if (!arena.getDeathmatch().isRunning()) {
-                arena.getDeathmatch().startDeathmatch(20);
-                return;
-            }
-
-            System.out.println("20");
-            return; // Get out of the run method.
-
-        }
-
-        System.out.println("predm players size == 1");
-        if (arena.getPlayers().size() == 1) {
-            UUID sgWinner = (arena.players.get(0));
-            Player winner = Bukkit.getPlayer(sgWinner);
-            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
-            arena.removePlayer(sgWinner);
-            cancel();
-            if (!arena.getPostGame().isRunning()) {
-                arena.getPostGame().startPostGame(15);
-                return;
-            }
-
-            return;
-
-        }
-
-        System.out.println("predm time 0");
-        if (this.time == 0) {
+        arena.broadcast(arena.getPlayers().toString());
 
 
+        if (time == 0) {
             cancel();
             if (!arena.getDeathmatch().isRunning()) {
                 arena.getDeathmatch().startDeathmatch(15);
                 return;
             }
+
             return; // Get out of the run method.
         }
+
+        if (arena.getPlayers().size() == 1) {
+            cancel();
+            UUID sgWinner = arena.players.get(0);
+            Player winner = Bukkit.getPlayer(sgWinner);
+            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
+            arena.getPostGame().startPostGame(15);
+            return;
+        }
+
+
+//        if (arena.getPlayers().isEmpty()) {
+//            cancel();
+//            arena.getPostGame().startPostGame(15);
+//        }
+
+
+//        if (arena.getPlayers().size() == 1) {
+//            cancel();
+//            if (!arena.getPostGame().isRunning()) {
+//                arena.getPostGame().startPostGame(15);
+//            }
+//
+//            UUID sgWinner = arena.players.get(0);
+//            Player winner = Bukkit.getPlayer(sgWinner);
+//            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
+//
+//            return;
+//        }
+
+
+//        if (time == 0 && arena.getPlayers().size() > 1) {
+//            System.out.println(arena.getId() + "ingame time 0 AND getplayers size greater than 1");
+//            cancel();
+//            arena.reset();
+//            if (!arena.getDeathmatch().isRunning()) {
+//                arena.getDeathmatch().startDeathmatch(15);
+//                return;
+//            }
+//            return; // Get out of the run method.
+//
+//        }
+
+
+//        if (time == 0) {
+//            System.out.println(arena.getId() + "ingame time == 0 OR players size < 5");
+//            arena.reset();
+//            cancel();
+//            if (!arena.getDeathmatch().isRunning()) {
+//                arena.getDeathmatch().startDeathmatch(15);
+//                return;
+//            }
+//            System.out.println("13");
+//            System.out.println("14");
+//            return; // Get out of the run method.
+//        }
+
 
         if (time % 15 == 0 || time <= 10) {
             // If the time is divisible by 15 then broadcast a countdown

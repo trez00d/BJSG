@@ -39,18 +39,32 @@ public final class BJSG extends JavaPlugin {
     public WandManager wandManager;
     public MagicWand magicWand;
     public ArrayList<Arena> activeArenas = new ArrayList<Arena>();
+    public HashMap<String, Arena> arenaIDMap = new HashMap<String, Arena>();
     public HashSet<Cuboid> activeRegions = new HashSet<Cuboid>();
     public HashSet<UUID> wandPrime = new HashSet<UUID>();
     public Tuple<Location, Location> clipboardMap = new Tuple<Location, Location>(null, null);
     public HashMap<String, LinkedHashMap<Integer, Location>> arenaSpawns = new HashMap<String, LinkedHashMap<Integer, Location>>();
     public HashMap<String, Location> arenaLobbies = new HashMap<String, Location>();
-    public HashSet<SGPlayer> sgPlayers = new HashSet<SGPlayer>();
+    public HashSet<UUID> sgPlayers = new HashSet<UUID>();
     public HashSet<UUID> looseWrapperPlayer = new HashSet<UUID>();
     public HashMap<UUID, Location> playerJoinSGEndTeleport = new HashMap<UUID, Location>();
 
     public ArrayList<Arena> arenaCache = new ArrayList<Arena>();
 
 
+    public void delPlayerJoinSGEndTeleport(UUID uuid) {
+        playerJoinSGEndTeleport.remove(uuid);
+    }
+    public Location getPlayerJoinSGEndTeleport(UUID uuid) {
+        return playerJoinSGEndTeleport.get(uuid);
+    }
+
+    public ArrayList<Arena> getActiveArenas() {
+        return activeArenas;
+    }
+    public HashSet<Cuboid> getActiveRegions() {
+        return activeRegions;
+    }
 
     public void grantMagicWand(UUID u) {
         Bukkit.getPlayer(u).getInventory().addItem(magicWand.getMagicWand());
@@ -106,7 +120,7 @@ public final class BJSG extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerWandInteract(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
         getServer().getPluginManager().registerEvents(new OpenChestListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerSignClick(), this);
+        getServer().getPluginManager().registerEvents(new PlayerSignClick(this), this);
 
 
         File config = new File(this.getDataFolder(), "config.yml");

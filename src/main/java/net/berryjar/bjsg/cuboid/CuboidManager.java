@@ -44,6 +44,7 @@ public class CuboidManager {
         Arena arena = new Arena(plugin, cuboid, regionID);
         arena.startArena();
         plugin.activeArenas.add(arena);
+        plugin.arenaIDMap.put(regionID, arena);
         plugin.getConfig().set("regions." + regionID + ".world", blockLoc1.getWorld().getName());
         plugin.getConfig().set("regions." + regionID + ".x1", blockLoc1.getX());
         plugin.getConfig().set("regions." + regionID + ".y1", blockLoc1.getY());
@@ -87,6 +88,7 @@ public class CuboidManager {
             Arena arena = new Arena(plugin, cuboid, key);
             arena.startArena();
             plugin.activeRegions.add(cuboid);
+            plugin.arenaIDMap.put(key, arena);
 
             arena.getLobby().startLobby(15);
 

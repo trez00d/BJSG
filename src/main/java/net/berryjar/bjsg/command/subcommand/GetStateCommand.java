@@ -54,7 +54,7 @@ public class GetStateCommand extends SubCommand {
             if (args[0].equalsIgnoreCase("getstate")) {
                 String arenaID = args[1];
                 ArenaManager arenaManager = new ArenaManager(plugin);
-                for (Arena a : plugin.activeArenas) {
+                for (Arena a : plugin.getActiveArenas()) {
                     if (arenaManager.getArenaID(a).equalsIgnoreCase(arenaID)) {
                         if (a.getId().equalsIgnoreCase(arenaID)) {
                             player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + a.getState());

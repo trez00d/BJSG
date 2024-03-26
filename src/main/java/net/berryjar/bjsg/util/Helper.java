@@ -3,6 +3,7 @@ package net.berryjar.bjsg.util;
 import net.berryjar.bjsg.BJSG;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.Location;
 
 public class Helper {
 
@@ -13,7 +14,8 @@ public class Helper {
     }
 
     public void teleportToSpawn(Player player) {
-        player.teleport(plugin.playerJoinSGEndTeleport.get(player.getUniqueId()));
+        Location loc = plugin.playerJoinSGEndTeleport.get(player.getUniqueId());
+        player.teleport(loc);
     }
 
     public static void clearInventoryAndEffects(Player player) {

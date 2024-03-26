@@ -141,7 +141,7 @@ public class EditCommand extends SubCommand {
                     String arenaID = args[2];
                     Location lobbyLoc = player.getLocation();
 
-                    for (Arena a : plugin.activeArenas) {
+                    for (Arena a : plugin.getActiveArenas()) {
                         if (a.getId().equalsIgnoreCase(arenaID)) {
                             String world = lobbyLoc.getWorld().getName();
                             int x = lobbyLoc.getBlockX();
@@ -171,7 +171,7 @@ public class EditCommand extends SubCommand {
                 }
                 if (args[1].equalsIgnoreCase("listspawns")) {
                     String arenaID = args[2];
-                    for (Arena a : plugin.activeArenas) {
+                    for (Arena a : plugin.getActiveArenas()) {
                         if (a.getId().equals(arenaID)) {
                             player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + a.getSpawns().toString());
                         }

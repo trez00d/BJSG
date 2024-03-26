@@ -8,8 +8,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ArenaManager {
 
@@ -28,6 +30,19 @@ public class ArenaManager {
         return arena.getId();
     }
 
+    public Arena getArena(UUID uuid) {
+        for (Arena a : getArenas()) {
+            if (a.getPlayers().contains(uuid)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Arena> getArenas() {
+        return plugin.activeArenas;
+
+    }
     public Arena getArenaByID(String arenaID) {
         for (Arena a : plugin.activeArenas) {
             if (a.getId().equals(arenaID)) {
@@ -81,9 +96,9 @@ public class ArenaManager {
             String arenaID = null;
             String stringWorld = null;
             int spawnID = 0;
-            int x = 0;
-            int y = 0;
-            int z = 0;
+            double x = 0;
+            double y = 0;
+            double z = 0;
             float pitch = 0;
             float yaw = 0;
             Location spawnLoc = null;
@@ -95,10 +110,10 @@ public class ArenaManager {
                 for (String keys2 : spawnIDs.getKeys(false)) {
                     ConfigurationSection atts = spawnIDs.getConfigurationSection(keys2);
                     stringWorld = spawnIDs.getString("world");
-                    x = spawnIDs.getInt("x");
-                    y = spawnIDs.getInt("y");
-                    z = spawnIDs.getInt("z");
-                    x = spawnIDs.getInt("x");
+                    x = spawnIDs.getDouble("x");
+                    y = spawnIDs.getDouble("y");
+                    z = spawnIDs.getDouble("z");
+                    x = spawnIDs.getDouble("x");
                     pitch = (float) spawnIDs.getDouble("pitch");
                     yaw = (float) spawnIDs.getDouble("yaw");
 

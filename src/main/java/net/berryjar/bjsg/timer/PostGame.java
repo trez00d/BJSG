@@ -32,69 +32,92 @@ public class PostGame extends BukkitRunnable {
         arena.setState(GameState.POSTGAME);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
-        arena.players.clear();
     }
 
     @Override
     public void run() {
+        arena.broadcast(arena.getPlayers().toString());
 
-        System.out.println("postgame time == 0");
-        if (time == 0) {
-            cancel();
+        if (this.time == 0) {
+
             for (UUID player : arena.getPlayers()) {
+
+                arena.removePlayer(player);
+                for (UUID deadPlayer : arena.getDeadPlayers()) {
+                    arena.removePlayer(deadPlayer);
+                }
+                Player p = Bukkit.getPlayer(player);
+//                Location sgEndTeleport = plugin.playerJoinSGEndTeleport.get(player);
+                plugin.sgPlayers.remove(player);
+                return;
+//                p.teleport(sgEndTeleport);
+            }
+            for (UUID player : arena.deadPlayers) {
                 arena.removePlayer(player);
                 Player p = Bukkit.getPlayer(player);
-                p.teleport(plugin.playerJoinSGEndTeleport.get(player));
+//                Location sgEndTeleport = plugin.playerJoinSGEndTeleport.get(player);
+                plugin.sgPlayers.remove(player);
+                return;
+//                p.teleport(sgEndTeleport);
             }
-            arena.players.clear();
-            plugin.activeArenas.remove(arena);
+            arena.getPlayers().clear();
+            cancel();
+
             Location lobLoc = arena.getLobbyLocation();
             Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
             arenaNew.setLobby(lobLoc);
             arenaNew.startArena();
 
             arenaNew.getLobby().startLobby(15);
+
+            arena.players.clear();
+            arena.deadPlayers.clear();
+            arena.intPlayers.clear();
+            plugin.activeArenas.remove(arena);
+
 
             return;
         }
-        if (time == 0 && arena.getPlayers().size() > 1) {
-            cancel();
-            for (UUID player : arena.getPlayers()) {
-                arena.removePlayer(player);
-                Player p = Bukkit.getPlayer(player);
-                p.teleport(plugin.playerJoinSGEndTeleport.get(player));
-            }
-            arena.players.clear();
-            plugin.activeArenas.remove(arena);
-
-            Location lobLoc = arena.getLobbyLocation();
-            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
-            arenaNew.setLobby(lobLoc);
-            arenaNew.startArena();
-            arenaNew.getLobby().startLobby(15);
 
 
-
-            return; // Get out of the run method.
-
-        }
-        if (arena.getPlayers().size() == 1) {
-            cancel();
-            for (UUID player : arena.getPlayers()) {
-                arena.removePlayer(player);
-                Player p = Bukkit.getPlayer(player);
-                p.teleport(plugin.playerJoinSGEndTeleport.get(player));
-            }
-            arena.players.clear();
-            plugin.activeArenas.remove(arena);
-            Location lobLoc = arena.getLobbyLocation();
-            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
-            arenaNew.setLobby(lobLoc);
-            arenaNew.startArena();
-            arenaNew.getLobby().startLobby(15);
-            return;
-        }
-
+//        if (time == 0 && arena.getPlayers().size() > 1) {
+//            cancel();
+//            for (UUID player : arena.getPlayers()) {
+//                arena.removePlayer(player);
+//                Player p = Bukkit.getPlayer(player);
+//                p.teleport(plugin.playerJoinSGEndTeleport.get(player));
+//            }
+//            arena.players.clear();
+//            plugin.activeArenas.remove(arena);
+//
+//            Location lobLoc = arena.getLobbyLocation();
+//            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
+//            arenaNew.setLobby(lobLoc);
+//            arenaNew.startArena();
+//            arenaNew.getLobby().startLobby(15);
+//
+//
+//
+//            return; // Get out of the run method.
+//
+//        }
+//        if (arena.getPlayers().size() == 1) {
+//            cancel();
+//            for (UUID player : arena.getPlayers()) {
+//                arena.removePlayer(player);
+//                Player p = Bukkit.getPlayer(player);
+//                p.teleport(plugin.playerJoinSGEndTeleport.get(player));
+//            }
+//            arena.players.clear();
+//            plugin.activeArenas.remove(arena);
+//            Location lobLoc = arena.getLobbyLocation();
+//            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
+//            arenaNew.setLobby(lobLoc);
+//            arenaNew.startArena();
+//            arenaNew.getLobby().startLobby(15);
+//            return;
+//        }
+//
         if (time % 15 == 0 || time <= 10) {
             // If the time is divisible by 15 then broadcast a countdown
             // message.

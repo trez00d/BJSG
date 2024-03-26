@@ -43,12 +43,17 @@ public class PreventionListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
-        for (Arena a : plugin.activeArenas) {
-            if (!(a.getState() == GameState.STOPPED)) {
+        for (Arena a : plugin.getActiveArenas()) {
+            if (a.getPlayers().contains(player.getUniqueId())) {
                 event.setCancelled(true);
-            } else {
+            }
+
+        }
+        for (Arena a : plugin.arenaCache) {
+            if (a.getPlayers().contains(player.getUniqueId()))  {
                 event.setCancelled(false);
             }
+
         }
         return;
 
@@ -61,12 +66,17 @@ public class PreventionListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
 
-        for (Arena a : plugin.activeArenas) {
-            if (!(a.getState() == GameState.STOPPED)) {
+        for (Arena a : plugin.getActiveArenas()) {
+            if (a.getPlayers().contains(player.getUniqueId())) {
                 event.setCancelled(true);
-            } else {
+            }
+
+        }
+        for (Arena a : plugin.arenaCache) {
+            if (a.getPlayers().contains(player.getUniqueId())) {
                 event.setCancelled(false);
             }
+
         }
 //        if (player.getGameMode() != GameMode.CREATIVE) {
 //            event.setCancelled(true);

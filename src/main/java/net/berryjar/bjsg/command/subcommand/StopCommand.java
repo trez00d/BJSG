@@ -63,7 +63,7 @@ public class StopCommand extends SubCommand {
                 Arena toDelete = arenaManager.getArenaByID(arenaID);
                 toDelete.stopArena();
                 System.out.println("Arena stop add to cache" + arenaManager.getArenaByID(arenaID));
-                plugin.activeArenas.remove(toDelete);
+                plugin.getActiveArenas().remove(toDelete);
                 player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "You stopped the arena." );
 
 //                Arena toDelete = arenaManager.getArenaByID(arenaID);
