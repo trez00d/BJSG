@@ -16,7 +16,6 @@ public class PlayerJoinLooseWrapper implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-//        SGPlayer sgPlayer = new SGPlayer(plugin, null, event.getPlayer().getUniqueId(), 0);
         plugin.createLooseWrapper(event.getPlayer().getUniqueId());
     }
 }

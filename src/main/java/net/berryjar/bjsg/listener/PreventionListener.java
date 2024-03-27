@@ -2,6 +2,7 @@ package net.berryjar.bjsg.listener;
 
 import net.berryjar.bjsg.BJSG;
 import net.berryjar.bjsg.arena.Arena;
+import net.berryjar.bjsg.arena.ArenaManager;
 import net.berryjar.bjsg.arena.GameState;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -25,16 +26,16 @@ public class PreventionListener implements Listener {
         this.plugin = plugin;
     }
 
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+        ArenaManager arenaManager = new ArenaManager(plugin);
         Player player = event.getPlayer();
         Location action = event.getFrom();
-        for (Arena a : plugin.activeArenas) {
-            if (a.getState() == GameState.PREGAME) {
-                if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
-                    event.setCancelled(true);
-                    player.teleport(action);
-                }
+        if (arenaManager.getArena(player.getUniqueId()).getState() == GameState.PREGAME) {
+            if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
+                event.setCancelled(true);
+                player.teleport(action);
             }
         }
     }
@@ -42,13 +43,11 @@ public class PreventionListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-
-        for (Arena a : plugin.getActiveArenas()) {
-            if (a.getPlayers().contains(player.getUniqueId())) {
-                event.setCancelled(true);
-            }
-
+        ArenaManager arenaManager = new ArenaManager(plugin);
+        if (!((arenaManager.getArena(player.getUniqueId())) == null)) {
+            event.setCancelled(true);
         }
+
         for (Arena a : plugin.arenaCache) {
             if (a.getPlayers().contains(player.getUniqueId()))  {
                 event.setCancelled(false);
@@ -56,52 +55,24 @@ public class PreventionListener implements Listener {
 
         }
         return;
-
-//        if (player.getGameMode() != GameMode.CREATIVE) {
-//            event.setCancelled(true);
-//        }
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
+        ArenaManager arenaManager = new ArenaManager(plugin);
 
-        for (Arena a : plugin.getActiveArenas()) {
-            if (a.getPlayers().contains(player.getUniqueId())) {
-                event.setCancelled(true);
-            }
-
+        if (!(arenaManager.getArena(player.getUniqueId()) == null)) {
+            event.setCancelled(true);
         }
+
+
         for (Arena a : plugin.arenaCache) {
             if (a.getPlayers().contains(player.getUniqueId())) {
                 event.setCancelled(false);
             }
 
         }
-//        if (player.getGameMode() != GameMode.CREATIVE) {
-//            event.setCancelled(true);
-//        }
     }
-
-//    @EventHandler
-//    public void onItemDrop(PlayerDropItemEvent event) {
-//        Player player = event.getPlayer();
-//        if (player.getGameMode() != GameMode.CREATIVE) {
-//            event.setCancelled(true);
-//        }
-//    }
-
-//    @EventHandler
-//    public void onItemPickup(PlayerPickupItemEvent event) {
-//        Player player = event.getPlayer();
-//        if (player.getGameMode() != GameMode.CREATIVE) {
-//            event.setCancelled(true);
-//        }
-//    }
-//
-//    @EventHandler
-//    public void onFoodLevelChange(FoodLevelChangeEvent event) {
-//        event.setCancelled(true);
-//    }
 
 }

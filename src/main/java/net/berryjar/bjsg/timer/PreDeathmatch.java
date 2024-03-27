@@ -55,52 +55,6 @@ public class PreDeathmatch extends BukkitRunnable {
         }
 
 
-//        if (arena.getPlayers().isEmpty()) {
-//            cancel();
-//            arena.getPostGame().startPostGame(15);
-//        }
-
-
-//        if (arena.getPlayers().size() == 1) {
-//            cancel();
-//            if (!arena.getPostGame().isRunning()) {
-//                arena.getPostGame().startPostGame(15);
-//            }
-//
-//            UUID sgWinner = arena.players.get(0);
-//            Player winner = Bukkit.getPlayer(sgWinner);
-//            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + winner.getName() + " won the game!");
-//
-//            return;
-//        }
-
-
-//        if (time == 0 && arena.getPlayers().size() > 1) {
-//            System.out.println(arena.getId() + "ingame time 0 AND getplayers size greater than 1");
-//            cancel();
-//            arena.reset();
-//            if (!arena.getDeathmatch().isRunning()) {
-//                arena.getDeathmatch().startDeathmatch(15);
-//                return;
-//            }
-//            return; // Get out of the run method.
-//
-//        }
-
-
-//        if (time == 0) {
-//            System.out.println(arena.getId() + "ingame time == 0 OR players size < 5");
-//            arena.reset();
-//            cancel();
-//            if (!arena.getDeathmatch().isRunning()) {
-//                arena.getDeathmatch().startDeathmatch(15);
-//                return;
-//            }
-//            System.out.println("13");
-//            System.out.println("14");
-//            return; // Get out of the run method.
-//        }
-
 
         if (time % 15 == 0 || time <= 10) {
             // If the time is divisible by 15 then broadcast a countdown
@@ -111,13 +65,6 @@ public class PreDeathmatch extends BukkitRunnable {
                 arena.broadcast(ChatHandler.chatPrefix + ChatColor.DARK_PURPLE + "Deathmatch will start in " + time + " second.");
             }
         }
-
-//        if (arena.getPlayers().size() < arena.getRequiredPlayers()) {
-//            cancel();
-//            arena.setState(GameState.LOBBY);
-//            arena.broadcast(ChatHandler.chatPrefix + ChatColor.RED + "There are too few players. Countdown stopped.");
-//            return; // Get out of the run method.
-//        }
 
         System.out.println(time);
         time--;

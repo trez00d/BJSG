@@ -30,9 +30,6 @@ public class ListCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-//        if (plugin.sgPlayers.containsKey(player.getUniqueId())) {
-//            player.sendMessage();
-//        }
         if (args.length == 2) {
             if(args[0].equalsIgnoreCase("arena")) {
                 if (args[1].equalsIgnoreCase("list")) {

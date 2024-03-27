@@ -43,9 +43,6 @@ public class StopCommand extends SubCommand {
         if (args.length != 2) {
             player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
         }
-        //bjsg stop <ID>
-        //Command <arg0> <arg1>
-
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("stop")) {
@@ -66,30 +63,9 @@ public class StopCommand extends SubCommand {
                 plugin.getActiveArenas().remove(toDelete);
                 player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "You stopped the arena." );
 
-//                Arena toDelete = arenaManager.getArenaByID(arenaID);
-//                if (!(toDelete == null)) {
-//                    toDelete.stopArena();
-//                    plugin.activeArenas.remove(arenaManager.getArenaByID(arenaID));
-//                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.GREEN + "You stopped arena " + toDelete);
-//
-//                } else {
-//                    player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena not found.");
-//                }
 
             }
-//                    player.sendMessage("3");
-//                    if (a.getId().equalsIgnoreCase(arenaID)) {
-//                        player.sendMessage("4");
-//                        a.addPlayer(player.getUniqueId());
-//                        player.sendMessage("5");
-//                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You joined arena " + arenaID);
-//                        player.sendMessage("6");
-//                    } else {
-//                        player.sendMessage("7");
-//                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
-//                        player.sendMessage("8");
-//                    }
-//                }
+
         }
 
     }

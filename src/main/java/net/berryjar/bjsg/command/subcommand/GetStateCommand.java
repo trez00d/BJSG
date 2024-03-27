@@ -37,9 +37,6 @@ public class GetStateCommand extends SubCommand {
         if (args.length != 2) {
             player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
         }
-        //bjsg join <ID>
-        //Command <arg0> <arg1>
-
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("getstate")) {
@@ -72,19 +69,7 @@ public class GetStateCommand extends SubCommand {
                         }
                     }
                 }
-//                    player.sendMessage("3");
-//                    if (a.getId().equalsIgnoreCase(arenaID)) {
-//                        player.sendMessage("4");
-//                        a.addPlayer(player.getUniqueId());
-//                        player.sendMessage("5");
-//                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You joined arena " + arenaID);
-//                        player.sendMessage("6");
-//                    } else {
-//                        player.sendMessage("7");
-//                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Arena ID not recognized.");
-//                        player.sendMessage("8");
-//                    }
-//                }
+
             }
 
         }

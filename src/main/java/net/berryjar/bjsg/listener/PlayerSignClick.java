@@ -22,37 +22,4 @@ public class PlayerSignClick implements Listener {
         this.plugin = plugin;
     }
 
-//    @EventHandler
-//    public void onSignClick(PlayerInteractEvent e) {
-//
-//        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
-//            return;
-//        }
-//
-//        Player p = e.getPlayer();
-//        if (p.hasPermission("sign.use")) {
-//
-//            Block b = e.getClickedBlock();
-//            if (b.getType() == Material.OAK_WALL_SIGN) {
-//
-//                Sign sign = (Sign) b.getState();
-//                if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[SG]")) {
-//                    for (Arena a : plugin.activeArenas) {
-//                        if(sign.getLine(1) != null && !sign.getLine(1).equals(a.getId())) {
-//                            String warp = ChatColor.stripColor(sign.getLine(1));
-//                            Bukkit.dispatchCommand(p, "bjsg join " + warp);
-//
-//                        }
-//                    }
-//
-//                }
-//            }
-//
-//        }
-//
-//    }
-
-
-
-
 }

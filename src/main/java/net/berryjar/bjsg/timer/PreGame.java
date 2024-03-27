@@ -51,49 +51,7 @@ public class PreGame extends BukkitRunnable {
                     }
                 }
 
-//            for (int i = 0; i < arena.getSpawns().size(); i++) {
-//                Location loc = arena.getSpawn(i);
-//                System.out.println(loc);
-//            }
-//            for (int i = 0; i < arena.getSpawns().size(); i++) {
-//                Location loc = arena.getSpawn(i);
-//
-//                System.out.println(player.getPlayer().getName() + playerNum);
-//                System.out.println(loc + "loading from map");
-//                if (playerNum == i) {
-//                    Player p = player.getPlayer();
-//                    p.teleport(loc);
-//                }
-//                System.out.println("test");
-//            }
-//            for (int i : arena.getSpawns().keySet()) {
-//                Location loc = arena.getSpawns().get(i);
-//                if (playerNum == i) {
-//                    player.getPlayer().teleport(loc);
-//                }
-//            }
-//            for (int i = 0; i < arena.getSpawns().size(); i++) {
-//                Location loc  = arena.getSpawns(i);
-//                Player p = player.getPlayer();
-//                p.teleport(loc);
-//            }
-//            int numSpawns = arena.getSpawns();
-//            int randomIndex = new Random().nextInt(numSpawns);
-//            if (randomIndex < 0 || randomIndex >= 2) {
-//                Location loc = arena.getSpawns().get(randomIndex);
-//                p.teleport(loc);
-//            } else {
-//                continue;
-//            }
 
-//            for (int i = 0; i < arena.getSpawns().keySet().size(); i++) {
-//                Location loc = arena.getSpawns().get(i);
-//                player.teleport(loc);
-//            }
-//            for (int i : arena.getSpawns().keySet()) {
-//                Location loc = arena.getSpawns().get(i);
-//                player.teleport(loc);
-//            }
             }
         }
     }
@@ -104,7 +62,6 @@ public class PreGame extends BukkitRunnable {
 
         if (time == 0) {
 
-//            System.out.println("pregame time 0 cancel return start ingame 15");
             cancel();
             if (!arena.getInGame().isRunning()) {
                 arena.getInGame().startInGame(15);
@@ -113,14 +70,7 @@ public class PreGame extends BukkitRunnable {
 
             return; // Get out of the run method.
         }
-//        System.out.println(arena.getId() + "pregame playersize is empty");
-//        if (arena.getPlayers().isEmpty()) {
-//            cancel();
-//            arena.reset();
-//            arena.getPostGame().startPostGame(15);
-//        }
 
-//        System.out.println(arena.getId() + "pregame playersize is 1");
         if (arena.getPlayers().size() == 1) {
             cancel();
             UUID sgWinner = arena.players.get(0);
@@ -142,13 +92,6 @@ public class PreGame extends BukkitRunnable {
                 arena.playSound(Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
             }
         }
-
-//        if (arena.getPlayers().size() < arena.getRequiredPlayers()) {
-//            cancel();
-//            arena.setState(GameState.LOBBY);
-//            arena.broadcast(ChatHandler.chatPrefix + ChatColor.RED + "There are too few players. Countdown stopped.");
-//            return; // Get out of the run method.
-//        }
 
         time--;
     }

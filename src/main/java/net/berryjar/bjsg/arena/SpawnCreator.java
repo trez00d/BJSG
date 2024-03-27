@@ -11,29 +11,16 @@ import java.util.LinkedHashMap;
 public class SpawnCreator {
 
     private final BJSG plugin;
-
-//    private int spawnInc = 0;
-
     public SpawnCreator(final BJSG plugin) {
         this.plugin = plugin;
     }
 
-//    public int getSpawnInc() {
-//        return spawnInc;
-//    }
-
     public void createSpawn(Location loc, String arenaID, int spawnID) {
         for (Arena a : plugin.activeArenas) {
             if (a.getId().equals(arenaID)) {
-
-//                int i = a.getLastSpawn();
-//                a.addSpawn(i, loc);
                 a.addSpawn(spawnID, loc);
-//                System.out.println("TEST " + spawnID);
                 Location spawnLoc = a.getSpawns().get(spawnID);
-//                System.out.println("TEST " + spawnID);
                 String world = loc.getWorld().getName();
-//                System.out.println("TEST " + spawnID);
                 double x = loc.getX();
                 double y = loc.getY();
                 double z = loc.getZ();
@@ -64,26 +51,6 @@ public class SpawnCreator {
                         }
                     }
                 }
-//                int i = a.getLastSpawn();
-////                a.addSpawn(i, loc);
-//                a.addSpawn(spawnInc, loc);
-//                Location spawnLoc = a.getSpawns().get(spawnInc);
-//                System.out.println("TEST " + spawnInc);
-//                String world = loc.getWorld().getName();
-//                System.out.println("TEST " + spawnInc);
-//                int x = loc.getBlockX();
-//                int y = loc.getBlockY();
-//                int z = loc.getBlockZ();
-//                float pitch = loc.getPitch();
-//                float yaw = loc.getYaw();
-//                LinkedHashMap<Integer, Location> arenaSpawn = a.getSpawns();
-//                plugin.arenaSpawns.put(arenaID, arenaSpawn);
-//                plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".world", world);
-//                plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".x", x);
-//                plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".y", y);
-//                plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".z", z);
-//                plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".pitch", pitch);
-//                plugin.getConfig().set("spawns." + arenaID + "." + spawnInc + ".yaw", yaw);
                 plugin.saveConfig();
             }
         }
@@ -92,12 +59,13 @@ public class SpawnCreator {
 
 
     public void createLobby(Location loc, String arenaID) {
-//        for (Arena a : plugin.activeArenas) {
-//            if (a.getId().equals(arenaID)) {
-//                a.addLobby(loc);
-//            }
-//        }
+        for (Arena a : plugin.activeArenas) {
+            if (a.getId().equals(arenaID)) {
+                a.lobbyLocation = loc;
+            }
+        }
         plugin.arenaLobbies.put(arenaID, loc);
+
     }
 
 }

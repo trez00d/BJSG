@@ -50,35 +50,7 @@ public class PlayerWandInteract implements Listener {
                 }
 
 
-//        if (wandManager.isPlayerPrimed(player)) {
-//            if (leftClick.equals(Action.LEFT_CLICK_BLOCK)) {
-//                if (event.getHand() == EquipmentSlot.HAND) {
-//                    ItemStack mWand = magicWand.getMagicWand();
-//                    if (player.getInventory().getItemInMainHand().isSimilar(mWand)) {
-//                        event.setCancelled(true);
-//                        Location blockLoc1 = event.getClickedBlock().getLocation();
-//                        wandManager.setPositionA(blockLoc1);
-//                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.LIGHT_PURPLE + "Location 1 set to world: " + blockLoc1.getWorld().getName() + ", X: " + blockLoc1.getBlockX() + ", Y: " + blockLoc1.getBlockY() + ", Z: " + blockLoc1.getBlockZ() + ".");
-//                    } else {
-//                        event.setCancelled(false);
-//                    }
-//                }
-//            } else if (rightClick.equals(Action.RIGHT_CLICK_BLOCK)) {
-//                if (event.getHand() == EquipmentSlot.HAND) {
-//                    ItemStack mWand = magicWand.getMagicWand();
-//                    if (player.getInventory().getItemInMainHand().isSimilar(mWand)) {
-//                        event.setCancelled(true);
-//                        Location blockLoc2 = event.getClickedBlock().getLocation();
-//                        wandManager.setPositionB(blockLoc2);
-//                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.LIGHT_PURPLE + "Location 2 set to world: " + blockLoc2.getWorld().getName() + ", X: " + blockLoc2.getBlockX() + ", Y: " + blockLoc2.getBlockY() + ", Z: " + blockLoc2.getBlockZ() + ".");
-//                    } else {
-//                        event.setCancelled(false);
-//                    }
-//                }
-//            }
-//        } else if (!(wandManager.isPlayerPrimed(player))) {
-//            event.setCancelled(false);
-//        }
+
             }
         }
         return;

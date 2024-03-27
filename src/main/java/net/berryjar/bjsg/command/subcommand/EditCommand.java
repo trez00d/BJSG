@@ -58,17 +58,6 @@ public class EditCommand extends SubCommand {
                     player.sendMessage(ChatHandler.chatPrefix + ChatHandler.noPerms);
                 } else if (player.hasPermission("bjsg.edit")) {
                     plugin.grantMagicWand(player.getUniqueId());
-//                    for (UUID lW : plugin.looseWrapperPlayer) {
-//                        if (lW.equals(player.getUniqueId())) {
-//
-//                        }
-//                    }
-//                    MagicWand magicWand = new MagicWand();
-//                    ItemStack wandStack = magicWand.getMagicWand();
-//                    wandManager.setPrimed(player);
-//                    player.getInventory().addItem(wandStack);
-//                    System.out.printf("LOOT CONFIG CREATE");
-
                     player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "You have been given the " + ChatColor.ITALIC + "Region Wand" + ChatColor.RESET + ChatColor.GOLD + ".");
                 }
             }
@@ -103,22 +92,7 @@ public class EditCommand extends SubCommand {
             if (args[1].equalsIgnoreCase("delspawn")) {
                 player.sendMessage(ChatHandler.chatPrefix + ChatHandler.insuffArgs);
             }
-//            if (args[0].equalsIgnoreCase("create")) {
-//                if (!(player.hasPermission("bjsg.edit"))) {
-//                    player.sendMessage(ChatHandler.chatPrefix + ChatHandler.noPerms);
-//                } else if (player.hasPermission("bjsg.edit")) {
-//                    if (wandManager.getPositionA() == null || wandManager.getPositionB() == null) {
-//                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "You have not set any boundaries for the region.");
-//                    } else {
-//                        regionManager.createRegion(args[1], wandManager.getPositionA(), wandManager.getPositionB());
-//                        player.sendMessage(ChatHandler.chatPrefix + ChatColor.GOLD + "Region " + args[1] + " created.");
-//                    }
-//                }
-//
-//            }
-//            else if (args[0].equalsIgnoreCase("create")) {
-//                player.sendMessage(ChatHandler.chatPrefix + ChatColor.RED + "Not enough arguments.");
-//            }
+
         }
         if (args.length == 3) {
 
@@ -160,7 +134,6 @@ public class EditCommand extends SubCommand {
                             plugin.saveConfig();
                         }
                     }
-
 
                 }
                 if (args[1].equalsIgnoreCase("addspawn")) {

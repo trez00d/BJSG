@@ -27,7 +27,6 @@ public class Lobby extends BukkitRunnable{
     }
 
     public void startLobby(int time) {
-//        System.out.println("lobby test");
         arena.setState(GameState.LOBBY);
         this.time = time;
         this.runTaskTimer(plugin, 0L, 20L);
@@ -45,24 +44,17 @@ public class Lobby extends BukkitRunnable{
 
         arena.broadcast(arena.getPlayers().toString());
 
-
-
-
         if (this.time == 0) {
             cancel();
             if (!arena.getPreGame().isRunning()) {
                 arena.getPreGame().startPreGame(15);
                 return;
             }
-
-//            arena.setLobbyNull();
-//            arena.setLobbyRunnable();
             return; // Get out of the run method.
         }
 //
         if (time % 15 == 0 || time <= 10) {
-            // If the time is divisible by 15 then broadcast a countdown
-            // message.
+
             if (time != 1) {
                 arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + "Game will start in " + time + " seconds.");
             } else {
@@ -76,18 +68,6 @@ public class Lobby extends BukkitRunnable{
             arena.broadcast(ChatHandler.chatPrefix + ChatColor.RED + "There are too few players. Countdown stopped.");
             return;
         }
-//
-//        if (arena.getPlayers().size() >= arena.getRequiredPlayers()) {
-//            System.out.println(arena.getId() + "lobby playersize >= requiredsize");
-//            cancel();
-//            if (!arena.getPreGame().isRunning()) {
-//                arena.getPreGame().startPreGame(15);
-//                return;
-//            }
-////            arena.setLobbyNull();
-////            arena.setLobbyRunnable();
-//            return;
-//        }
 
         time--;
     }

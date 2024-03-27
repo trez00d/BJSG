@@ -37,14 +37,10 @@ public class LeaveListener implements Listener {
             if (a.deadPlayers.contains(event.getPlayer().getUniqueId())) {
                 a.removePlayer(event.getPlayer().getUniqueId());
                 plugin.sgPlayers.remove(event.getPlayer().getUniqueId());
-//                a.broadcast(ChatHandler.chatPrefix + ChatColor.RED + Bukkit.getPlayer(player).getName() + " left the game.");
-//                a.getArenaRegion().getWorld().strikeLightningEffect(Bukkit.getPlayer(player).getLocation());
-//                a.playSound(Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1, 1);
+
                 event.setQuitMessage(null);
             }
         }
-//        plugin.peelLooseWrapper(event.getPlayer().getUniqueId());
-
     }
 
 }

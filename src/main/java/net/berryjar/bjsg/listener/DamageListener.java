@@ -29,23 +29,6 @@ public class DamageListener implements Listener {
 
         event.setCancelled(playerArena.getState() == GameState.LOBBY || playerArena.getState() == GameState.PREGAME || playerArena.getState() == GameState.POSTGAME);
 
-//        for (Arena a : plugin.getActiveArenas()) {
-//            System.out.println("damage2");
-//            if (a.getState() == GameState.LOBBY || a.getState() == GameState.PREGAME || a.getState() == GameState.POSTGAME) {
-//                for (UUID u : a.getPlayers()) {
-//                    System.out.println("damage3");
-//                    if (a.getPlayers().contains(u)) {
-//                        if (a.getState() == GameState.LOBBY || a.getState() == GameState.PREGAME || a.getState() == GameState.POSTGAME) {
-//                            System.out.println("damage5");
-//                            event.setCancelled(true);
-//                        } else {
-//                            System.out.println("damage4");
-//                            return;
-//                        }
-//                    }
-//                }
-//            }
-//        }
 
     }
 

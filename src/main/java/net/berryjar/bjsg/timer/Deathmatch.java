@@ -39,49 +39,6 @@ public class Deathmatch extends BukkitRunnable {
             if (arena.getSpawns().containsKey(playerNum)) {
                 Location spawnLoc = arena.getSpawn(playerNum);
                 p.teleport(spawnLoc);
-//            for (int i = 0; i < arena.getSpawns().size(); i++) {
-//                Location loc = arena.getSpawn(i);
-//                System.out.println(loc);
-//            }
-//            for (int i = 0; i < arena.getSpawns().size(); i++) {
-//                Location loc = arena.getSpawn(i);
-//
-//                System.out.println(player.getPlayer().getName() + playerNum);
-//                System.out.println(loc + "loading from map");
-//                if (playerNum == i) {
-//                    Player p = player.getPlayer();
-//                    p.teleport(loc);
-//                }
-//                System.out.println("test");
-//            }
-//            for (i                System.out.println("lobby time 0 cancel return start pregame 15");nt i : arena.getSpawns().keySet()) {
-//                Location loc = arena.getSpawns().get(i);
-//                if (playerNum == i) {
-//                    player.getPlayer().teleport(loc);
-//                }
-//            }
-//            for (int i = 0; i < arena.getSpawns().size(); i++) {
-//                Location loc  = arena.getSpawns(i);
-//                Player p = player.getPlayer();
-//                p.teleport(loc);
-//            }
-//            int numSpawns = arena.getSpawns();
-//            int randomIndex = new Random().nextInt(numSpawns);
-//            if (randomIndex < 0 || randomIndex >= 2) {
-//                Location loc = arena.getSpawns().get(randomIndex);
-//                p.teleport(loc);
-//            } else {
-//                continue;
-//            }
-
-//            for (int i = 0; i < arena.getSpawns().keySet().size(); i++) {
-//                Location loc = arena.getSpawns().get(i);
-//                player.teleport(loc);
-//            }
-//            for (int i : arena.getSpawns().keySet()) {
-//                Location loc = arena.getSpawns().get(i);
-//                player.teleport(loc);
-//            }
             }
         }
     }
@@ -97,7 +54,6 @@ public class Deathmatch extends BukkitRunnable {
                 arena.getPostGame().startPostGame(15);
                 return;
             }
-//            arena.reset();
             return; // Get out of the run method.
         }
         if (arena.getPlayers().size() == 1) {
@@ -109,49 +65,9 @@ public class Deathmatch extends BukkitRunnable {
             return;
         }
 
-//        if (arena.getPlayers().isEmpty()) {
-//            System.out.println(arena.getId() + "dm playersize isempty");
-//            arena.reset();
-//            cancel();
-//            arena.getPostGame().startPostGame(15);
-//        }
-
-
-//        if (arena.getPlayers().size() == 1) {
-//
-//            if (!arena.getPostGame().isRunning()) {
-//                arena.getPostGame().startPostGame(30);
-//                arena.broadcast(arena.getPlayers().get(0).toString() + " has won the game!");
-//                cancel();
-//                return;
-//
-//            }
-//
-////            arena.broadcast(arena.getPlayers().get(0).toString() + " has won the game!");
-//            arena.reset();
-//            return;
-//        }
-
-
-//        if (time == 0 && arena.getPlayers().size() > 1) {
-//            if (!arena.getPostGame().isRunning()) {
-//                arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
-//                arena.getPostGame().startPostGame(15);
-//                cancel();
-//                return;
-//            }
-//
-//
-//
-//            return; // Get out of the run method.
-//
-//        }
-
-
 
         if (time % 15 == 0 || time <= 10) {
-            // If the time is divisible by 15 then broadcast a countdown
-            // message.
+
             if (time != 1) {
                 arena.broadcast(ChatHandler.chatPrefix + ChatColor.GREEN + "The game will end in " + time + " seconds.");
             } else {
