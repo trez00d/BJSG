@@ -100,7 +100,6 @@ public final class BJSG extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        // Plugin startup logic
         getCommand("bjsg").setExecutor(new CommandManager(this));
         manager = new Manager(this);
         commandManager = new CommandManager(this);
@@ -112,8 +111,7 @@ public final class BJSG extends JavaPlugin {
         playerWandInteract = new PlayerWandInteract(this);
         openChestListener = new OpenChestListener(this);
         magicWand = new MagicWand();
-//        conMan = new ConMan(this);
-//        saveResource("loot.yml", false);
+
         getServer().getPluginManager().registerEvents(new DeathListener(this), this);
         getServer().getPluginManager().registerEvents(new LeaveListener(this), this);
         getServer().getPluginManager().registerEvents(new PreventionListener(this), this);
@@ -132,55 +130,29 @@ public final class BJSG extends JavaPlugin {
         } else {
             getLogger().log(Level.INFO, "Default config.yml already exists, not generating a new one.");
         }
-//        saveResource("loot.yml", false);
-
-//        configMan = new ConfigMan(this);
-        chestManager = new ChestManager(getConfig());
 //
+        chestManager = new ChestManager(getConfig());
 
-//        FileConfiguration conf = conMan.getLootConfig();
-
-
-
-//        System.out.println("test" + spawns.toString());
         regionManager.loadRegions(getConfig());
         arenaManager.loadArenaSpawns(getConfig());
         arenaManager.loadLobbySpawns(getConfig());
 
 
 
-
-
-//        System.out.println("from BJSG: " + arenaLobbies);
-//
-//        System.out.println(arenaSpawns);
-//        for (String arenaID : spawnsa.getKeys(false)) {
-//            ConfigurationSection arena = getConfig().getConfigurationSection(arenaID);
-//            System.out.println(arena);
-//        }
-//        for (String spawns : getConfig().getConfigurationSection("spawns").getKeys(false)) {
-//            System.out.println("test " + spawns);
-//
-//            ConfigurationSection spawnsSec = getConfig().getConfigurationSection(spawns);
-//            System.out.println("test test " + spawnsSec);
-////            for (String arenaID : spawnsSec.getKeys(false)) {
-////                ConfigurationSection arenaSec = getConfig().getConfigurationSection(arenaID);
-////                arenaManager.loadArenaSpawns(arenaSec);
-////            }
-////        }
-////        for (String spawns : getConfig().getConfigurationSection("spawns").getKeys(false)) {
-////            ConfigurationSection lobbySec = getConfig().getConfigurationSection(spawns);
-////            for (String arenaID : lobbySec.getKeys(false)) {
-////                ConfigurationSection arenaSec = getConfig().getConfigurationSection(arenaID);
-////                arenaManager.loadLobbySpawns(arenaSec);
-////            }
-//        }
-
-
     }
 
     @Override
     public void onDisable() {
+        activeArenas.clear();
+        arenaIDMap.clear();
+        activeRegions.clear();
+        wandPrime.clear();
+        arenaSpawns.clear();
+        arenaLobbies.clear();
+        sgPlayers.clear();
+        looseWrapperPlayer.clear();
+        playerJoinSGEndTeleport.clear();
+        arenaCache.clear();
         // Plugin shutdown logic
     }
 }

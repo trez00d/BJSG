@@ -42,8 +42,6 @@ public class Lobby extends BukkitRunnable{
     @Override
     public void run() {
 
-        arena.broadcast(arena.getPlayers().toString());
-
         if (this.time == 0) {
             cancel();
             if (!arena.getPreGame().isRunning()) {

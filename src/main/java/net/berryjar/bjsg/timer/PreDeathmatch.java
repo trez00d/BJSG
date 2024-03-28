@@ -32,8 +32,6 @@ public class PreDeathmatch extends BukkitRunnable {
 
     @Override
     public void run() {
-        arena.broadcast(arena.getPlayers().toString());
-
 
         if (time == 0) {
             cancel();
@@ -66,7 +64,6 @@ public class PreDeathmatch extends BukkitRunnable {
             }
         }
 
-        System.out.println(time);
         time--;
     }
 

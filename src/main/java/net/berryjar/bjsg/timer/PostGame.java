@@ -36,9 +36,9 @@ public class PostGame extends BukkitRunnable {
 
     @Override
     public void run() {
-        arena.broadcast(arena.getPlayers().toString());
 
-        if (this.time == 0) {
+        if (this.time == 0 && arena.getPlayers().size() == 1) {
+            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
 
             for (UUID player : arena.getPlayers()) {
 
@@ -69,7 +69,81 @@ public class PostGame extends BukkitRunnable {
             arena.players.clear();
             arena.deadPlayers.clear();
             arena.intPlayers.clear();
-            plugin.activeArenas.remove(arena);
+            plugin.getActiveArenas().remove(arena);
+
+
+            return;
+        }
+        if (this.time == 0 && arena.getPlayers().size() > 1) {
+            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
+
+            for (UUID player : arena.getPlayers()) {
+
+                arena.removePlayer(player);
+                for (UUID deadPlayer : arena.getDeadPlayers()) {
+                    arena.removePlayer(deadPlayer);
+                }
+                Player p = Bukkit.getPlayer(player);
+                plugin.sgPlayers.remove(player);
+                return;
+            }
+            for (UUID player : arena.deadPlayers) {
+                arena.removePlayer(player);
+                Player p = Bukkit.getPlayer(player);
+                plugin.sgPlayers.remove(player);
+                return;
+            }
+            arena.getPlayers().clear();
+            cancel();
+
+            Location lobLoc = arena.getLobbyLocation();
+            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
+            arenaNew.setLobby(lobLoc);
+            arenaNew.startArena();
+
+            arenaNew.getLobby().startLobby(15);
+
+            arena.players.clear();
+            arena.deadPlayers.clear();
+            arena.intPlayers.clear();
+            plugin.getActiveArenas().remove(arena);
+
+
+            return;
+        }
+        if (arena.getPlayers().size() > 1) {
+            arena.broadcast(ChatHandler.chatPrefix + ChatColor.GOLD + "The game ended in a draw.");
+
+            for (UUID player : arena.getPlayers()) {
+
+                arena.removePlayer(player);
+                for (UUID deadPlayer : arena.getDeadPlayers()) {
+                    arena.removePlayer(deadPlayer);
+                }
+                Player p = Bukkit.getPlayer(player);
+                plugin.sgPlayers.remove(player);
+                return;
+            }
+            for (UUID player : arena.deadPlayers) {
+                arena.removePlayer(player);
+                Player p = Bukkit.getPlayer(player);
+                plugin.sgPlayers.remove(player);
+                return;
+            }
+            arena.getPlayers().clear();
+            cancel();
+
+            Location lobLoc = arena.getLobbyLocation();
+            Arena arenaNew = new Arena(plugin, arena.getArenaRegion(), arena.getId());
+            arenaNew.setLobby(lobLoc);
+            arenaNew.startArena();
+
+            arenaNew.getLobby().startLobby(15);
+
+            arena.players.clear();
+            arena.deadPlayers.clear();
+            arena.intPlayers.clear();
+            plugin.getActiveArenas().remove(arena);
 
 
             return;

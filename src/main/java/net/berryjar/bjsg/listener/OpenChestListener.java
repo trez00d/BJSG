@@ -22,7 +22,6 @@ public class OpenChestListener implements Listener {
 
     @EventHandler()
     public void onPlayerChestOpen(InventoryOpenEvent event) {
-        System.out.println("LISTENER TEST");
         ChestManager chestManager = new ChestManager(plugin.getConfig());
         InventoryHolder holder = event.getInventory().getHolder();
         Chest chest = (Chest) holder;
@@ -35,7 +34,6 @@ public class OpenChestListener implements Listener {
                             return;
                         }
                         chestManager.markAsOpened(a, chest.getLocation());
-                        System.out.println("has been opened " + a.openedChests);
                         chestManager.fill(chest.getBlockInventory());
                     }
                 }

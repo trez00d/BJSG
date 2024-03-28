@@ -57,8 +57,6 @@ public class PreGame extends BukkitRunnable {
     }
     @Override
     public void run() {
-        arena.broadcast("in pregame");
-        arena.broadcast(arena.getPlayers().toString());
 
         if (time == 0) {
 

@@ -36,10 +36,6 @@ public class InGame extends BukkitRunnable {
 
     @Override
     public void run() {
-
-        arena.broadcast(arena.getPlayers().toString());
-
-
         if (time == 0) {
             cancel();
             if (!arena.getPreDeathmatch().isRunning()) {

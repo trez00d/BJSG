@@ -32,7 +32,7 @@ public class PreventionListener implements Listener {
         ArenaManager arenaManager = new ArenaManager(plugin);
         Player player = event.getPlayer();
         Location action = event.getFrom();
-        if (arenaManager.getArena(player.getUniqueId()).getState() == GameState.PREGAME) {
+        if (arenaManager.getArena(player.getUniqueId()) != null && arenaManager.getArena(player.getUniqueId()).getState() == GameState.PREGAME) {
             if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
                 event.setCancelled(true);
                 player.teleport(action);

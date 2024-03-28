@@ -45,8 +45,6 @@ public class Deathmatch extends BukkitRunnable {
 
     @Override
     public void run() {
-        arena.broadcast(arena.getPlayers().toString());
-
 
         if (time == 0) {
             cancel();
@@ -64,6 +62,8 @@ public class Deathmatch extends BukkitRunnable {
             arena.getPostGame().startPostGame(15);
             return;
         }
+
+
 
 
         if (time % 15 == 0 || time <= 10) {

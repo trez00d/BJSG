@@ -51,10 +51,6 @@ public class DeathListener implements Listener {
             playerArena.playSound(Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1, 1);
         }
 
-
-
-        System.out.println("DeathListener 71");
-
     }
 
 }
